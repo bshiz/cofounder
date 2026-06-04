@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createServerClient } from '@supabase/ssr'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
@@ -8,19 +8,33 @@ export async function GET(request: NextRequest) {
   const error = searchParams.get('error')
   const errorDescription = searchParams.get('error_description')
 
-  // OAuth provider returned an error (e.g. user denied access)
   if (error) {
-    console.error('[auth/callback] OAuth error:', error, errorDescription)
     return NextResponse.redirect(`${origin}/?error=${encodeURIComponent(errorDescription ?? error)}`)
   }
 
   if (code) {
-    const supabase = await createClient()
+    const response = NextResponse.redirect(`${origin}${next}`)
+
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll()
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options))
+          },
+        },
+      }
+    )
+
     const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
     if (!exchangeError) {
-      return NextResponse.redirect(`${origin}${next}`)
+      return response
     }
-    console.error('[auth/callback] exchangeCodeForSession error:', exchangeError.message)
     return NextResponse.redirect(`${origin}/?error=${encodeURIComponent(exchangeError.message)}`)
   }
 
