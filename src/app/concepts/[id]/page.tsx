@@ -18,6 +18,12 @@ export default async function ConceptPage({
 
   if (!concept) notFound()
 
+  // Supabase Storage serves HTML with Content-Disposition: attachment, which
+  // causes browsers to display raw source. Fetch the content server-side and
+  // inject it via srcdoc so the iframe always renders it as HTML.
+  const htmlRes = await fetch(concept.html_file_url)
+  const htmlContent = htmlRes.ok ? await htmlRes.text() : '<p>Could not load preview.</p>'
+
   return (
     <div className="min-h-screen bg-white">
       <nav className="border-b border-gray-200 px-6 py-4 flex items-center gap-4">
@@ -46,8 +52,8 @@ export default async function ConceptPage({
             </span>
           </div>
           <iframe
-            src={concept.html_file_url}
-            sandbox="allow-scripts allow-same-origin"
+            srcdoc={htmlContent}
+            sandbox="allow-scripts"
             className="w-full"
             style={{ height: '600px', border: 'none' }}
             title={`${concept.title} preview`}
