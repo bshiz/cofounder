@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import InterestForm from './InterestForm'
+import DeleteButton from './DeleteButton'
 
 type Profile = { full_name: string | null; avatar_url: string | null } | null
 
@@ -48,19 +49,40 @@ export default async function ConceptPage({
 
   if (!concept) notFound()
 
-  const { data: poster } = await supabase
-    .from('profiles')
-    .select('id, full_name, avatar_url')
-    .eq('id', concept.user_id)
-    .single()
-
-  // Fetch the HTML to render via srcdoc (Supabase serves with Content-Disposition: attachment)
-  const htmlRes = await fetch(concept.html_file_url)
-  const htmlContent = htmlRes.ok ? await htmlRes.text() : '<p>Could not load preview.</p>'
-
   const isOwner = user?.id === concept.user_id
 
-  // Check if the current user has already expressed interest
+  // Fetch in parallel: poster profile, HTML content, and owner-only interest data
+  const [posterResult, htmlRes, interestsResult] = await Promise.all([
+    supabase.from('profiles').select('full_name, avatar_url').eq('id', concept.user_id).single(),
+    fetch(concept.html_file_url),
+    isOwner
+      ? supabase
+          .from('interests')
+          .select('id, user_id, reason, created_at')
+          .eq('concept_id', id)
+          .order('created_at', { ascending: false })
+      : Promise.resolve({ data: null }),
+  ])
+
+  const poster = posterResult.data
+  const htmlContent = htmlRes.ok ? await htmlRes.text() : '<p>Could not load preview.</p>'
+  const interests = interestsResult.data ?? []
+
+  // Fetch profiles for interested users (owner view only)
+  type InterestProfile = { id: string; full_name: string | null; email: string | null; avatar_url: string | null }
+  let interestProfileMap: Record<string, InterestProfile> = {}
+  if (isOwner && interests.length > 0) {
+    const userIds = interests.map((i: { user_id: string }) => i.user_id)
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('id, full_name, email, avatar_url')
+      .in('id', userIds)
+    if (profiles) {
+      interestProfileMap = Object.fromEntries(profiles.map((p) => [p.id, p]))
+    }
+  }
+
+  // Check if logged-in non-owner has already expressed interest
   let existingInterest: { reason: string } | null = null
   if (user && !isOwner) {
     const { data } = await supabase
@@ -87,7 +109,20 @@ export default async function ConceptPage({
       <main className="max-w-5xl mx-auto px-6 py-10">
         {/* Title + poster + description */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-3">{concept.title}</h1>
+          <div className="flex items-start justify-between gap-4 mb-3">
+            <h1 className="text-3xl font-bold text-gray-900">{concept.title}</h1>
+            {isOwner && (
+              <div className="flex items-center gap-2 shrink-0 mt-1">
+                <Link
+                  href={`/concepts/${id}/edit`}
+                  className="rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+                >
+                  Edit
+                </Link>
+                <DeleteButton conceptId={id} />
+              </div>
+            )}
+          </div>
           <div className="flex items-center gap-2.5 mb-4">
             <PosterAvatar profile={poster} size={28} />
             <span className="text-sm text-gray-500">{poster?.full_name ?? 'Anonymous'}</span>
@@ -114,7 +149,38 @@ export default async function ConceptPage({
           />
         </div>
 
-        {/* Interest section */}
+        {/* Owner: who expressed interest */}
+        {isOwner && (
+          <div className="max-w-2xl">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Interest {interests.length > 0 && <span className="text-gray-400 font-normal">({interests.length})</span>}
+            </h2>
+            {interests.length === 0 ? (
+              <p className="text-sm text-gray-400">No one has expressed interest yet.</p>
+            ) : (
+              <ul className="flex flex-col gap-3">
+                {interests.map((interest: { id: string; user_id: string; reason: string }) => {
+                  const p = interestProfileMap[interest.user_id]
+                  const name = p?.full_name ?? p?.email ?? 'Anonymous'
+                  return (
+                    <li key={interest.id} className="rounded-xl border border-gray-200 px-4 py-4">
+                      <div className="flex items-center gap-2.5 mb-2">
+                        <PosterAvatar profile={p ?? null} size={26} />
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{name}</p>
+                          {p?.email && <p className="text-xs text-gray-400">{p.email}</p>}
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-600 italic">&ldquo;{interest.reason}&rdquo;</p>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </div>
+        )}
+
+        {/* Non-owner: interest form */}
         {!isOwner && (
           <div className="max-w-lg">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Interested in building this?</h2>
@@ -127,7 +193,7 @@ export default async function ConceptPage({
 
             {success ? (
               <div className="rounded-xl bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
-                Your interest has been sent to the founder. Check your email for updates.
+                Your interest has been sent to the founder.
               </div>
             ) : existingInterest ? (
               <div className="rounded-xl bg-gray-50 border border-gray-200 px-4 py-3">

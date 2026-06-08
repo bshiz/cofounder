@@ -18,7 +18,7 @@ export default function DeleteButton({ conceptId }: { conceptId: string }) {
       <button
         type="button"
         onClick={handleClick}
-        className="rounded-full border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 transition-colors"
+        className="rounded-full border border-red-200 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
       >
         Delete
       </button>
