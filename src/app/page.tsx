@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { signInWithGoogle } from './actions'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const CATEGORIES = [
   'Developer Tools',
@@ -28,7 +29,7 @@ export default async function Home({
 
   let query = supabase
     .from('concepts')
-    .select('id, title, description, category, created_at')
+    .select('id, title, description, category, created_at, user_id')
     .order('created_at', { ascending: false })
 
   if (category) {
@@ -36,6 +37,20 @@ export default async function Home({
   }
 
   const { data: concepts } = await query
+
+  // Batch-fetch poster profiles
+  const posterIds = [...new Set((concepts ?? []).map((c) => c.user_id))]
+  type Profile = { id: string; full_name: string | null; avatar_url: string | null }
+  let profileMap: Record<string, Profile> = {}
+  if (posterIds.length > 0) {
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('id, full_name, avatar_url')
+      .in('id', posterIds)
+    if (profiles) {
+      profileMap = Object.fromEntries(profiles.map((p) => [p.id, p]))
+    }
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -110,15 +125,20 @@ export default async function Home({
               <Link
                 key={concept.id}
                 href={`/concepts/${concept.id}`}
-                className="group rounded-2xl border border-gray-200 p-5 hover:border-gray-400 hover:shadow-md transition-all"
+                className="group rounded-2xl border border-gray-200 p-5 hover:border-gray-400 hover:shadow-md transition-all flex flex-col gap-3"
               >
-                <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600 mb-3">
-                  {concept.category}
-                </span>
-                <h2 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-gray-700">
-                  {concept.title}
-                </h2>
-                <p className="text-sm text-gray-500 line-clamp-3">{concept.description}</p>
+                <div className="flex items-center justify-between">
+                  <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
+                    {concept.category}
+                  </span>
+                </div>
+                <div>
+                  <h2 className="text-base font-semibold text-gray-900 mb-1.5 group-hover:text-gray-700">
+                    {concept.title}
+                  </h2>
+                  <p className="text-sm text-gray-500 line-clamp-3">{concept.description}</p>
+                </div>
+                <PosterRow profile={profileMap[concept.user_id]} />
               </Link>
             ))}
           </div>
@@ -141,6 +161,42 @@ export default async function Home({
         )}
       </main>
     </div>
+  )
+}
+
+type Profile = { id?: string; full_name: string | null; avatar_url: string | null } | undefined
+
+function PosterRow({ profile }: { profile: Profile }) {
+  const name = profile?.full_name ?? 'Anonymous'
+  return (
+    <div className="flex items-center gap-2 mt-auto pt-1 border-t border-gray-100">
+      <Avatar profile={profile} size={22} />
+      <span className="text-xs text-gray-500 truncate">{name}</span>
+    </div>
+  )
+}
+
+function Avatar({ profile, size = 28 }: { profile: Profile; size?: number }) {
+  if (profile?.avatar_url) {
+    return (
+      <Image
+        src={profile.avatar_url}
+        alt={profile.full_name ?? 'Avatar'}
+        width={size}
+        height={size}
+        className="rounded-full object-cover shrink-0"
+        style={{ width: size, height: size }}
+      />
+    )
+  }
+  const initial = profile?.full_name?.charAt(0).toUpperCase() ?? '?'
+  return (
+    <span
+      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600 shrink-0"
+      style={{ width: size, height: size }}
+    >
+      {initial}
+    </span>
   )
 }
 

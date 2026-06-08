@@ -84,11 +84,12 @@ export async function expressInterest(formData: FormData) {
     redirect(`/concepts/${conceptId}?error=Please+enter+a+reason`)
   }
 
-  // Upsert the interested user's profile so the dashboard can display their name
+  // Upsert the interested user's profile so the dashboard can display their name/avatar
   await supabase.from('profiles').upsert({
     id: user.id,
     full_name: user.user_metadata?.full_name ?? null,
     email: user.email ?? null,
+    avatar_url: user.user_metadata?.avatar_url ?? null,
   })
 
   const { error: insertError } = await supabase

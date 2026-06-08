@@ -1,7 +1,34 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import InterestForm from './InterestForm'
+
+type Profile = { full_name: string | null; avatar_url: string | null } | null
+
+function PosterAvatar({ profile, size = 28 }: { profile: Profile; size?: number }) {
+  if (profile?.avatar_url) {
+    return (
+      <Image
+        src={profile.avatar_url}
+        alt={profile.full_name ?? 'Avatar'}
+        width={size}
+        height={size}
+        className="rounded-full object-cover shrink-0"
+        style={{ width: size, height: size }}
+      />
+    )
+  }
+  const initial = profile?.full_name?.charAt(0).toUpperCase() ?? '?'
+  return (
+    <span
+      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600 shrink-0"
+      style={{ width: size, height: size }}
+    >
+      {initial}
+    </span>
+  )
+}
 
 export default async function ConceptPage({
   params,
@@ -20,6 +47,12 @@ export default async function ConceptPage({
   ])
 
   if (!concept) notFound()
+
+  const { data: poster } = await supabase
+    .from('profiles')
+    .select('id, full_name, avatar_url')
+    .eq('id', concept.user_id)
+    .single()
 
   // Fetch the HTML to render via srcdoc (Supabase serves with Content-Disposition: attachment)
   const htmlRes = await fetch(concept.html_file_url)
@@ -52,9 +85,13 @@ export default async function ConceptPage({
       </nav>
 
       <main className="max-w-5xl mx-auto px-6 py-10">
-        {/* Title + description */}
+        {/* Title + poster + description */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-3">{concept.title}</h1>
+          <div className="flex items-center gap-2.5 mb-4">
+            <PosterAvatar profile={poster} size={28} />
+            <span className="text-sm text-gray-500">{poster?.full_name ?? 'Anonymous'}</span>
+          </div>
           <p className="text-gray-600 text-base leading-relaxed max-w-2xl">{concept.description}</p>
         </div>
 
