@@ -127,18 +127,18 @@ export default async function Home({
                 href={`/concepts/${concept.id}`}
                 className="group rounded-2xl border border-gray-200 p-5 hover:border-gray-400 hover:shadow-md transition-all flex flex-col gap-3"
               >
-                <div className="flex items-center justify-between">
-                  <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
-                    {concept.category}
-                  </span>
-                </div>
+                <PosterRow profile={profileMap[concept.user_id]} />
                 <div>
                   <h2 className="text-base font-semibold text-gray-900 mb-1.5 group-hover:text-gray-700">
                     {concept.title}
                   </h2>
                   <p className="text-sm text-gray-500 line-clamp-3">{concept.description}</p>
                 </div>
-                <PosterRow profile={profileMap[concept.user_id]} />
+                <div className="mt-auto pt-3">
+                  <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
+                    {concept.category}
+                  </span>
+                </div>
               </Link>
             ))}
           </div>
@@ -169,7 +169,7 @@ type Profile = { id?: string; full_name: string | null; avatar_url: string | nul
 function PosterRow({ profile }: { profile: Profile }) {
   const name = profile?.full_name ?? 'Anonymous'
   return (
-    <div className="flex items-center gap-2 mt-auto pt-1 border-t border-gray-100">
+    <div className="flex items-center gap-2">
       <Avatar profile={profile} size={22} />
       <span className="text-xs text-gray-500 truncate">{name}</span>
     </div>
