@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import DeleteButton from './DeleteButton'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -99,7 +100,7 @@ export default async function DashboardPage() {
               return (
                 <div key={concept.id} className="rounded-2xl border border-gray-200 overflow-hidden">
                   {/* Concept header */}
-                  <div className="px-5 py-4 flex items-center justify-between border-b border-gray-100">
+                  <div className="px-5 py-4 flex items-center justify-between gap-4 border-b border-gray-100">
                     <div className="flex items-center gap-3 min-w-0">
                       <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600 shrink-0">
                         {concept.category}
@@ -111,9 +112,18 @@ export default async function DashboardPage() {
                         {concept.title}
                       </Link>
                     </div>
-                    <span className="text-xs text-gray-400 shrink-0 ml-4">
-                      {interests.length} interested
-                    </span>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-xs text-gray-400">
+                        {interests.length} interested
+                      </span>
+                      <Link
+                        href={`/concepts/${concept.id}/edit`}
+                        className="rounded-full border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+                      >
+                        Edit
+                      </Link>
+                      <DeleteButton conceptId={concept.id} />
+                    </div>
                   </div>
 
                   {/* Interest list */}

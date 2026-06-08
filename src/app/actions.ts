@@ -143,3 +143,110 @@ export async function expressInterest(formData: FormData) {
 
   redirect(`/concepts/${conceptId}?success=1`)
 }
+
+export async function updateConcept(formData: FormData) {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) redirect('/?error=Not+authenticated')
+
+  const conceptId = formData.get('concept_id') as string
+  const title = (formData.get('title') as string).trim()
+  const description = (formData.get('description') as string).trim()
+  const category = formData.get('category') as string
+  const htmlFile = formData.get('html_file') as File
+
+  if (!title || !description || !category) {
+    redirect(`/concepts/${conceptId}/edit?error=All+fields+are+required`)
+  }
+
+  // Verify ownership
+  const { data: existing } = await supabase
+    .from('concepts')
+    .select('user_id, html_file_url')
+    .eq('id', conceptId)
+    .single()
+
+  if (!existing || existing.user_id !== user.id) {
+    redirect('/?error=Not+authorized')
+  }
+
+  let html_file_url = existing.html_file_url
+
+  // Replace the HTML file only if a new one was uploaded
+  if (htmlFile?.size > 0) {
+    const newPath = `${user.id}/${Date.now()}.html`
+
+    const { data: upload, error: uploadError } = await supabase.storage
+      .from('concepts')
+      .upload(newPath, htmlFile, { contentType: 'text/html', upsert: false })
+
+    if (uploadError) {
+      redirect(`/concepts/${conceptId}/edit?error=${encodeURIComponent(uploadError.message)}`)
+    }
+
+    // Delete the old file (best-effort)
+    try {
+      const oldPath = new URL(existing.html_file_url).pathname.replace(
+        '/storage/v1/object/public/concepts/',
+        ''
+      )
+      await supabase.storage.from('concepts').remove([oldPath])
+    } catch {
+      // Non-fatal if old file cleanup fails
+    }
+
+    html_file_url = supabase.storage.from('concepts').getPublicUrl(upload.path).data.publicUrl
+  }
+
+  const { error: updateError } = await supabase
+    .from('concepts')
+    .update({ title, description, category, html_file_url })
+    .eq('id', conceptId)
+    .eq('user_id', user.id)
+
+  if (updateError) {
+    redirect(`/concepts/${conceptId}/edit?error=${encodeURIComponent(updateError.message)}`)
+  }
+
+  redirect(`/concepts/${conceptId}`)
+}
+
+export async function deleteConcept(formData: FormData) {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) redirect('/?error=Not+authenticated')
+
+  const conceptId = formData.get('concept_id') as string
+
+  // Verify ownership and get file URL before deleting
+  const { data: concept } = await supabase
+    .from('concepts')
+    .select('user_id, html_file_url')
+    .eq('id', conceptId)
+    .single()
+
+  if (!concept || concept.user_id !== user.id) {
+    redirect('/dashboard?error=Not+authorized')
+  }
+
+  // Delete HTML file from storage (best-effort)
+  try {
+    const storagePath = new URL(concept.html_file_url).pathname.replace(
+      '/storage/v1/object/public/concepts/',
+      ''
+    )
+    await supabase.storage.from('concepts').remove([storagePath])
+  } catch {
+    // Non-fatal
+  }
+
+  await supabase.from('concepts').delete().eq('id', conceptId).eq('user_id', user.id)
+
+  redirect('/dashboard')
+}
