@@ -52,7 +52,7 @@ export default async function ConceptPage({
             </span>
           </div>
           <iframe
-            srcdoc={htmlContent}
+            srcDoc={htmlContent}
             sandbox="allow-scripts"
             className="w-full"
             style={{ height: '600px', border: 'none' }}
