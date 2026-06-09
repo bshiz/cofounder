@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import InterestForm from './InterestForm'
 import DeleteButton from './DeleteButton'
+import Header from '@/app/components/Header'
 
 type Profile = { full_name: string | null; avatar_url: string | null } | null
 
@@ -116,12 +117,8 @@ export default async function ConceptPage({
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <nav className="border-b border-gray-200 px-6 py-4 flex items-center gap-4">
-        <Link href="/" className="text-sm text-gray-500 hover:text-gray-900">
-          ← Back
-        </Link>
-      </nav>
+    <div className="min-h-screen bg-white pt-12">
+      <Header />
 
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-8 items-start">

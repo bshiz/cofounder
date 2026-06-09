@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { updateConcept } from '@/app/actions'
+import Header from '@/app/components/Header'
 
 const CATEGORIES = [
   'Developer Tools',
@@ -36,14 +37,8 @@ export default async function EditConceptPage({
   if (!user || user.id !== concept.user_id) redirect('/?error=Not+authorized')
 
   return (
-    <div className="min-h-screen bg-white">
-      <nav className="border-b border-gray-200 px-6 py-4 flex items-center gap-4">
-        <Link href={`/concepts/${id}`} className="text-sm text-gray-500 hover:text-gray-900">
-          ← Back
-        </Link>
-        <span className="text-gray-300">|</span>
-        <span className="text-sm font-medium text-gray-900">Edit concept</span>
-      </nav>
+    <div className="min-h-screen bg-white pt-12">
+      <Header showPostButton={false} />
 
       <main className="max-w-2xl mx-auto px-6 py-12">
         <h1 className="text-2xl font-bold text-gray-900 mb-8">Edit concept</h1>

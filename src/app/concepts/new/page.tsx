@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
 import { createConcept } from '@/app/actions'
 import PrototypeInput from './PrototypeInput'
+import Header from '@/app/components/Header'
 
 const CATEGORIES = [
   'Developer Tools',
@@ -33,14 +33,8 @@ export default async function NewConceptPage({
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <nav className="border-b border-gray-200 px-6 py-4 flex items-center gap-4">
-        <Link href="/" className="text-sm text-gray-500 hover:text-gray-900">
-          ← Back
-        </Link>
-        <span className="text-gray-300">|</span>
-        <span className="text-sm font-medium text-gray-900">Post a Concept</span>
-      </nav>
+    <div className="min-h-screen bg-white pt-12">
+      <Header showPostButton={false} />
 
       <main className="max-w-2xl mx-auto px-6 py-12">
         <h1 className="text-2xl font-bold text-gray-900 mb-8">Share your concept</h1>

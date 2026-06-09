@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
-import { signInWithGoogle } from './actions'
 import Link from 'next/link'
 import Image from 'next/image'
+import Header from '@/app/components/Header'
 
 const CATEGORIES = [
   'Developer Tools',
@@ -95,63 +95,22 @@ export default async function Home({
 
   const posterIds = [...new Set((concepts ?? []).map((c) => c.user_id))]
 
-  const [profilesResult, userProfileResult] = await Promise.all([
-    posterIds.length > 0
-      ? supabase.from('profiles').select('id, full_name, avatar_url').in('id', posterIds)
-      : Promise.resolve({ data: null }),
-    user
-      ? supabase.from('profiles').select('full_name, avatar_url').eq('id', user.id).single()
-      : Promise.resolve({ data: null }),
-  ])
-
   type ProfileRow = { id: string; full_name: string | null; avatar_url: string | null }
-  const profileMap: Record<string, ProfileRow> = Object.fromEntries(
-    (profilesResult.data ?? []).map((p) => [p.id, p])
-  )
-  const userProfile = userProfileResult.data
+  let profileMap: Record<string, ProfileRow> = {}
+  if (posterIds.length > 0) {
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('id, full_name, avatar_url')
+      .in('id', posterIds)
+    if (profiles) {
+      profileMap = Object.fromEntries(profiles.map((p) => [p.id, p]))
+    }
+  }
 
   return (
     <div className="min-h-screen bg-white">
 
-      {/* Top header */}
-      <header className="fixed top-0 left-0 right-0 z-20 h-12 border-b border-gray-200 bg-white flex items-center justify-between px-5">
-        <Link href="/" className="text-base font-bold text-gray-900 tracking-tight">
-          Cofounder
-        </Link>
-        <div className="flex items-center gap-3">
-          {user ? (
-            <>
-              <Link
-                href="/concepts/new"
-                className="rounded-full bg-gray-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
-              >
-                Post a Concept
-              </Link>
-              <Link href="/dashboard">
-                <Avatar profile={userProfile} size={28} />
-              </Link>
-              <form action="/auth/signout" method="POST">
-                <button
-                  type="submit"
-                  className="text-sm text-gray-400 hover:text-gray-700 transition-colors"
-                >
-                  Sign out
-                </button>
-              </form>
-            </>
-          ) : (
-            <form action={signInWithGoogle}>
-              <button
-                type="submit"
-                className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                <GoogleIcon />
-                Sign in
-              </button>
-            </form>
-          )}
-        </div>
-      </header>
+      <Header />
 
       <div className="flex pt-12">
         {/* Left sidebar */}
