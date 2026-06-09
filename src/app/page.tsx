@@ -116,6 +116,24 @@ export default async function Home({
         {/* Left sidebar */}
         <aside className="fixed left-0 top-12 h-[calc(100vh-3rem)] w-56 border-r border-gray-200 bg-white overflow-y-auto z-10">
           <nav className="px-3 py-4">
+            <ul className="flex flex-col gap-0.5 mb-4">
+              <li>
+                <Link
+                  href="/"
+                  className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                >
+                  About
+                </Link>
+              </li>
+            </ul>
             <p className="px-3 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
               Browse
             </p>
