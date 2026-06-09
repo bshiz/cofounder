@@ -28,7 +28,7 @@ export default function SidebarNav() {
           <Link
             href="/"
             className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              isHome && !currentCategory
+              pathname === '/' && !currentCategory
                 ? 'bg-gray-100 text-gray-900'
                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
             }`}
