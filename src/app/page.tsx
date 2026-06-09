@@ -159,6 +159,11 @@ export default async function Home({
           )}
 
           <main className="max-w-2xl mx-auto px-6 py-8">
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Find your co-founder</h1>
+              <p className="text-gray-500">For anyone with a real idea and the initiative to start — tech, education, music, health, and everything in between.</p>
+            </div>
+
           {concepts && concepts.length > 0 ? (
             <div className="flex flex-col gap-4">
               {concepts.map((concept) => {
