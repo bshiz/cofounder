@@ -92,8 +92,8 @@ export default async function Home({
       )}
       <main className="max-w-2xl mx-auto px-6 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2 leading-tight" style={{ fontFamily: 'var(--font-display)' }}>Find your co-founder</h1>
-          <p className="text-gray-500">For anyone with a real idea and the initiative to start — tech, education, music, health, and everything in between.</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2 leading-tight" style={{ fontFamily: 'var(--font-display)' }}>Where makers find each other</h1>
+          <p className="text-gray-500">Share what you&apos;re building and find someone who can&apos;t wait to work on it with you.</p>
         </div>
 
         {concepts && concepts.length > 0 ? (
