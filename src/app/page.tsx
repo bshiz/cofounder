@@ -159,34 +159,29 @@ export default async function Home({
         </nav>
 
         {/* Bottom actions */}
-        <div className="border-t border-gray-200 p-4 flex flex-col gap-3">
+        <div className="border-t border-gray-200 px-3 py-3 flex flex-col gap-0.5">
           <Link
             href="/concepts/new"
-            className="rounded-full bg-gray-900 py-2.5 text-sm font-medium text-white text-center hover:bg-gray-700 transition-colors"
+            className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
           >
             Post a Concept
           </Link>
 
           {user ? (
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2.5">
-                <Avatar profile={userProfile} size={28} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
-                    {userProfile?.full_name ?? user.email}
-                  </p>
-                  <Link
-                    href="/dashboard"
-                    className="text-xs text-gray-400 hover:text-gray-700 transition-colors"
-                  >
-                    My Concepts
-                  </Link>
-                </div>
-              </div>
+            <div className="flex flex-col gap-0.5">
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-2.5 rounded-lg px-3 py-2 hover:bg-gray-50 transition-colors group"
+              >
+                <Avatar profile={userProfile} size={26} />
+                <span className="text-sm font-medium text-gray-900 truncate group-hover:text-gray-700">
+                  {userProfile?.full_name ?? user.email}
+                </span>
+              </Link>
               <form action="/auth/signout" method="POST">
                 <button
                   type="submit"
-                  className="text-xs text-gray-400 hover:text-gray-700 transition-colors"
+                  className="w-full text-left rounded-lg px-3 py-1.5 text-xs text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors"
                 >
                   Sign out
                 </button>
