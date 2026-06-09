@@ -2,6 +2,7 @@
 
 import { usePathname, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { Home as HomeIcon, Info } from 'lucide-react'
 
 const CATEGORIES = [
   'Developer Tools',
@@ -28,24 +29,26 @@ export default function SidebarNav() {
         <li>
           <Link
             href="/"
-            className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
               isHome && !currentCategory
                 ? 'bg-gray-100 text-gray-900'
                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
             }`}
           >
+            <HomeIcon size={14} className="shrink-0" />
             Home
           </Link>
         </li>
         <li>
           <Link
             href="/about"
-            className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+            className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
               pathname === '/about'
                 ? 'bg-gray-100 text-gray-900'
                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
             }`}
           >
+            <Info size={14} className="shrink-0" />
             About
           </Link>
         </li>
