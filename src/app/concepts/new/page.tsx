@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createConcept } from '@/app/actions'
+import PrototypeInput from './PrototypeInput'
 
 const CATEGORIES = [
   'Developer Tools',
@@ -101,36 +102,7 @@ export default async function NewConceptPage({
             </select>
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="prototype_url" className="text-sm font-medium text-gray-700">
-              Prototype URL
-              <span className="ml-1.5 text-gray-400 font-normal">(optional)</span>
-            </label>
-            <input
-              id="prototype_url"
-              name="prototype_url"
-              type="url"
-              placeholder="https://your-prototype.com"
-              className="rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-            />
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="html_file" className="text-sm font-medium text-gray-700">
-              HTML file
-              <span className="ml-1.5 text-gray-400 font-normal">(optional)</span>
-            </label>
-            <p className="text-xs text-gray-400">
-              At least one of prototype URL or HTML file is required.
-            </p>
-            <input
-              id="html_file"
-              name="html_file"
-              type="file"
-              accept=".html,text/html"
-              className="rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-900 file:mr-4 file:rounded-full file:border-0 file:bg-gray-100 file:px-4 file:py-1.5 file:text-xs file:font-medium file:text-gray-700 hover:file:bg-gray-200 focus:outline-none"
-            />
-          </div>
+          <PrototypeInput />
 
           <button
             type="submit"
