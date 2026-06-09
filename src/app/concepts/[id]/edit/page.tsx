@@ -105,6 +105,21 @@ export default async function EditConceptPage({
           </div>
 
           <div className="flex flex-col gap-1.5">
+            <label htmlFor="prototype_url" className="text-sm font-medium text-gray-700">
+              Prototype URL
+              <span className="ml-1.5 text-gray-400 font-normal">(optional)</span>
+            </label>
+            <input
+              id="prototype_url"
+              name="prototype_url"
+              type="url"
+              defaultValue={concept.prototype_url ?? ''}
+              placeholder="https://your-prototype.com"
+              className="rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
             <label htmlFor="html_file" className="text-sm font-medium text-gray-700">
               HTML file
               <span className="ml-1.5 text-gray-400 font-normal">(optional — leave blank to keep existing)</span>

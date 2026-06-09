@@ -34,29 +34,35 @@ export async function createConcept(formData: FormData) {
   const title = (formData.get('title') as string).trim()
   const description = (formData.get('description') as string).trim()
   const category = formData.get('category') as string
+  const prototypeUrl = (formData.get('prototype_url') as string | null)?.trim() || null
   const htmlFile = formData.get('html_file') as File
 
-  if (!title || !description || !category || !htmlFile?.size) {
+  if (!title || !description || !category) {
     redirect('/concepts/new?error=All+fields+are+required')
   }
-
-  const path = `${user.id}/${Date.now()}.html`
-
-  const { data: upload, error: uploadError } = await supabase.storage
-    .from('concepts')
-    .upload(path, htmlFile, { contentType: 'text/html', upsert: false })
-
-  if (uploadError) {
-    redirect(`/concepts/new?error=${encodeURIComponent(uploadError.message)}`)
+  if (!prototypeUrl && !htmlFile?.size) {
+    redirect('/concepts/new?error=Please+provide+a+prototype+URL+or+upload+an+HTML+file')
   }
 
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from('concepts').getPublicUrl(upload.path)
+  let html_file_url: string | null = null
+
+  if (htmlFile?.size) {
+    const path = `${user.id}/${Date.now()}.html`
+
+    const { data: upload, error: uploadError } = await supabase.storage
+      .from('concepts')
+      .upload(path, htmlFile, { contentType: 'text/html', upsert: false })
+
+    if (uploadError) {
+      redirect(`/concepts/new?error=${encodeURIComponent(uploadError.message)}`)
+    }
+
+    html_file_url = supabase.storage.from('concepts').getPublicUrl(upload.path).data.publicUrl
+  }
 
   const { data: concept, error: insertError } = await supabase
     .from('concepts')
-    .insert({ user_id: user.id, title, description, category, html_file_url: publicUrl })
+    .insert({ user_id: user.id, title, description, category, prototype_url: prototypeUrl, html_file_url })
     .select('id')
     .single()
 
@@ -156,6 +162,7 @@ export async function updateConcept(formData: FormData) {
   const title = (formData.get('title') as string).trim()
   const description = (formData.get('description') as string).trim()
   const category = formData.get('category') as string
+  const prototypeUrl = (formData.get('prototype_url') as string | null)?.trim() || null
   const htmlFile = formData.get('html_file') as File
 
   if (!title || !description || !category) {
@@ -165,7 +172,7 @@ export async function updateConcept(formData: FormData) {
   // Verify ownership
   const { data: existing } = await supabase
     .from('concepts')
-    .select('user_id, html_file_url')
+    .select('user_id, html_file_url, prototype_url')
     .eq('id', conceptId)
     .single()
 
@@ -174,6 +181,10 @@ export async function updateConcept(formData: FormData) {
   }
 
   let html_file_url = existing.html_file_url
+
+  if (!prototypeUrl && !html_file_url && !htmlFile?.size) {
+    redirect(`/concepts/${conceptId}/edit?error=Please+provide+a+prototype+URL+or+upload+an+HTML+file`)
+  }
 
   // Replace the HTML file only if a new one was uploaded
   if (htmlFile?.size > 0) {
@@ -188,14 +199,16 @@ export async function updateConcept(formData: FormData) {
     }
 
     // Delete the old file (best-effort)
-    try {
-      const oldPath = new URL(existing.html_file_url).pathname.replace(
-        '/storage/v1/object/public/concepts/',
-        ''
-      )
-      await supabase.storage.from('concepts').remove([oldPath])
-    } catch {
-      // Non-fatal if old file cleanup fails
+    if (existing.html_file_url) {
+      try {
+        const oldPath = new URL(existing.html_file_url).pathname.replace(
+          '/storage/v1/object/public/concepts/',
+          ''
+        )
+        await supabase.storage.from('concepts').remove([oldPath])
+      } catch {
+        // Non-fatal if old file cleanup fails
+      }
     }
 
     html_file_url = supabase.storage.from('concepts').getPublicUrl(upload.path).data.publicUrl
@@ -203,7 +216,7 @@ export async function updateConcept(formData: FormData) {
 
   const { error: updateError } = await supabase
     .from('concepts')
-    .update({ title, description, category, html_file_url })
+    .update({ title, description, category, prototype_url: prototypeUrl, html_file_url })
     .eq('id', conceptId)
     .eq('user_id', user.id)
 
@@ -236,14 +249,16 @@ export async function deleteConcept(formData: FormData) {
   }
 
   // Delete HTML file from storage (best-effort)
-  try {
-    const storagePath = new URL(concept.html_file_url).pathname.replace(
-      '/storage/v1/object/public/concepts/',
-      ''
-    )
-    await supabase.storage.from('concepts').remove([storagePath])
-  } catch {
-    // Non-fatal
+  if (concept.html_file_url) {
+    try {
+      const storagePath = new URL(concept.html_file_url).pathname.replace(
+        '/storage/v1/object/public/concepts/',
+        ''
+      )
+      await supabase.storage.from('concepts').remove([storagePath])
+    } catch {
+      // Non-fatal
+    }
   }
 
   await supabase.from('concepts').delete().eq('id', conceptId).eq('user_id', user.id)
