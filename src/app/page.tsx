@@ -116,10 +116,16 @@ export default async function Home({
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 h-screen w-60 border-r border-gray-200 bg-white flex flex-col z-10">
 
-        {/* Logo */}
-        <div className="px-5 pt-6 pb-5">
-          <Link href="/" className="text-xl font-bold text-gray-900 tracking-tight">
+        {/* Logo + Post button */}
+        <div className="px-4 pt-6 pb-4 flex flex-col gap-3">
+          <Link href="/" className="px-1 text-xl font-bold text-gray-900 tracking-tight">
             Cofounder
+          </Link>
+          <Link
+            href="/concepts/new"
+            className="rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-medium text-white text-center hover:bg-gray-700 transition-colors"
+          >
+            Post a Concept
           </Link>
         </div>
 
@@ -158,35 +164,18 @@ export default async function Home({
           </ul>
         </nav>
 
-        {/* Bottom actions */}
-        <div className="border-t border-gray-200 px-3 py-3 flex flex-col gap-0.5">
-          <Link
-            href="/concepts/new"
-            className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
-          >
-            Post a Concept
-          </Link>
-
+        {/* Bottom user row */}
+        <div className="border-t border-gray-200 px-3 py-3">
           {user ? (
-            <div className="flex flex-col gap-0.5">
-              <Link
-                href="/dashboard"
-                className="flex items-center gap-2.5 rounded-lg px-3 py-2 hover:bg-gray-50 transition-colors group"
-              >
-                <Avatar profile={userProfile} size={26} />
-                <span className="text-sm font-medium text-gray-900 truncate group-hover:text-gray-700">
-                  {userProfile?.full_name ?? user.email}
-                </span>
-              </Link>
-              <form action="/auth/signout" method="POST">
-                <button
-                  type="submit"
-                  className="w-full text-left rounded-lg px-3 py-1.5 text-xs text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors"
-                >
-                  Sign out
-                </button>
-              </form>
-            </div>
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-2.5 rounded-lg px-3 py-2 hover:bg-gray-50 transition-colors group"
+            >
+              <Avatar profile={userProfile} size={26} />
+              <span className="text-sm font-medium text-gray-900 truncate group-hover:text-gray-700">
+                {userProfile?.full_name ?? user.email}
+              </span>
+            </Link>
           ) : (
             <form action={signInWithGoogle}>
               <button
