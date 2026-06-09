@@ -16,165 +16,25 @@ const CATEGORIES = [
   'Other',
 ]
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string; error?: string }>
-}) {
-  const { category, error } = await searchParams
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  let query = supabase
-    .from('concepts')
-    .select('id, title, description, category, created_at, user_id')
-    .order('created_at', { ascending: false })
-
-  if (category) {
-    query = query.eq('category', category)
-  }
-
-  const { data: concepts } = await query
-
-  // Batch-fetch poster profiles
-  const posterIds = [...new Set((concepts ?? []).map((c) => c.user_id))]
-  type Profile = { id: string; full_name: string | null; avatar_url: string | null }
-  let profileMap: Record<string, Profile> = {}
-  if (posterIds.length > 0) {
-    const { data: profiles } = await supabase
-      .from('profiles')
-      .select('id, full_name, avatar_url')
-      .in('id', posterIds)
-    if (profiles) {
-      profileMap = Object.fromEntries(profiles.map((p) => [p.id, p]))
-    }
-  }
-
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Nav */}
-      <nav className="sticky top-0 z-10 border-b border-gray-200 bg-white/95 backdrop-blur px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold text-gray-900 tracking-tight">
-          Cofounder
-        </Link>
-        <div className="flex items-center gap-3">
-          {user ? (
-            <>
-              <Link
-                href="/dashboard"
-                className="rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
-              >
-                My Concepts
-              </Link>
-              <Link
-                href="/concepts/new"
-                className="rounded-full bg-gray-900 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-700"
-              >
-                Post a Concept
-              </Link>
-              <form action="/auth/signout" method="POST">
-                <button
-                  type="submit"
-                  className="rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
-                >
-                  Sign out
-                </button>
-              </form>
-            </>
-          ) : (
-            <form action={signInWithGoogle}>
-              <button
-                type="submit"
-                className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-5 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-              >
-                <GoogleIcon />
-                Sign in
-              </button>
-            </form>
-          )}
-        </div>
-      </nav>
-
-      {/* Error banner */}
-      {error && (
-        <div className="bg-red-50 border-b border-red-200 px-6 py-3 text-sm text-red-700">
-          {decodeURIComponent(error)}
-        </div>
-      )}
-
-      {/* Category filter */}
-      <div className="border-b border-gray-200 px-6 py-3 flex gap-2 overflow-x-auto scrollbar-hide">
-        <FilterPill href="/" active={!category} label="All" />
-        {CATEGORIES.map((cat) => (
-          <FilterPill
-            key={cat}
-            href={`/?category=${encodeURIComponent(cat)}`}
-            active={category === cat}
-            label={cat}
-          />
-        ))}
-      </div>
-
-      {/* Concepts grid */}
-      <main className="max-w-6xl mx-auto px-6 py-10">
-        {concepts && concepts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {concepts.map((concept) => (
-              <Link
-                key={concept.id}
-                href={`/concepts/${concept.id}`}
-                className="group rounded-2xl border border-gray-200 p-5 hover:border-gray-400 hover:shadow-md transition-all flex flex-col gap-3"
-              >
-                <PosterRow profile={profileMap[concept.user_id]} />
-                <div>
-                  <h2 className="text-base font-semibold text-gray-900 mb-1.5 group-hover:text-gray-700">
-                    {concept.title}
-                  </h2>
-                  <p className="text-sm text-gray-500 line-clamp-3">{concept.description}</p>
-                </div>
-                <div className="mt-auto pt-3">
-                  <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
-                    {concept.category}
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center py-32 text-center">
-            <p className="text-gray-400 text-lg mb-4">
-              {category ? `No concepts in "${category}" yet.` : 'No concepts posted yet.'}
-            </p>
-            {user ? (
-              <Link
-                href="/concepts/new"
-                className="rounded-full bg-gray-900 px-6 py-2 text-sm font-medium text-white hover:bg-gray-700"
-              >
-                Post the first one
-              </Link>
-            ) : (
-              <p className="text-sm text-gray-400">Sign in to post the first concept.</p>
-            )}
-          </div>
-        )}
-      </main>
-    </div>
-  )
+const CATEGORY_COLORS: Record<string, { from: string; to: string }> = {
+  'Developer Tools':     { from: '#6d28d9', to: '#4338ca' },
+  'Consumer Apps':       { from: '#f97316', to: '#e11d48' },
+  'Productivity':        { from: '#2563eb', to: '#0891b2' },
+  'Health & Wellness':   { from: '#059669', to: '#0d9488' },
+  'Finance':             { from: '#0d9488', to: '#065f46' },
+  'Education':           { from: '#d97706', to: '#ea580c' },
+  'Creator Tools':       { from: '#9333ea', to: '#db2777' },
+  'Hardware & Physical': { from: '#475569', to: '#1e293b' },
+  'Social':              { from: '#ec4899', to: '#e11d48' },
+  'Other':               { from: '#6b7280', to: '#374151' },
 }
 
-type Profile = { id?: string; full_name: string | null; avatar_url: string | null } | undefined
-
-function PosterRow({ profile }: { profile: Profile }) {
-  const name = profile?.full_name ?? 'Anonymous'
-  return (
-    <div className="flex items-center gap-2">
-      <Avatar profile={profile} size={22} />
-      <span className="text-xs text-gray-500 truncate">{name}</span>
-    </div>
-  )
+function getGradientStyle(category: string): React.CSSProperties {
+  const colors = CATEGORY_COLORS[category] ?? { from: '#6b7280', to: '#374151' }
+  return { background: `linear-gradient(135deg, ${colors.from}, ${colors.to})` }
 }
+
+type Profile = { id?: string; full_name: string | null; avatar_url: string | null } | null | undefined
 
 function Avatar({ profile, size = 28 }: { profile: Profile; size?: number }) {
   if (profile?.avatar_url) {
@@ -200,21 +60,6 @@ function Avatar({ profile, size = 28 }: { profile: Profile; size?: number }) {
   )
 }
 
-function FilterPill({ href, active, label }: { href: string; active: boolean; label: string }) {
-  return (
-    <Link
-      href={href}
-      className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-        active
-          ? 'bg-gray-900 text-white'
-          : 'border border-gray-200 text-gray-600 hover:border-gray-400 hover:text-gray-900'
-      }`}
-    >
-      {label}
-    </Link>
-  )
-}
-
 function GoogleIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="h-4 w-4">
@@ -223,5 +68,214 @@ function GoogleIcon() {
       <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z" />
       <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z" />
     </svg>
+  )
+}
+
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string; error?: string }>
+}) {
+  const { category, error } = await searchParams
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  let query = supabase
+    .from('concepts')
+    .select('id, title, description, category, created_at, user_id')
+    .order('created_at', { ascending: false })
+
+  if (category) {
+    query = query.eq('category', category)
+  }
+
+  const { data: concepts } = await query
+
+  const posterIds = [...new Set((concepts ?? []).map((c) => c.user_id))]
+
+  const [profilesResult, userProfileResult] = await Promise.all([
+    posterIds.length > 0
+      ? supabase.from('profiles').select('id, full_name, avatar_url').in('id', posterIds)
+      : Promise.resolve({ data: null }),
+    user
+      ? supabase.from('profiles').select('full_name, avatar_url').eq('id', user.id).single()
+      : Promise.resolve({ data: null }),
+  ])
+
+  type ProfileRow = { id: string; full_name: string | null; avatar_url: string | null }
+  const profileMap: Record<string, ProfileRow> = Object.fromEntries(
+    (profilesResult.data ?? []).map((p) => [p.id, p])
+  )
+  const userProfile = userProfileResult.data
+
+  return (
+    <div className="flex min-h-screen bg-white">
+
+      {/* Sidebar */}
+      <aside className="fixed left-0 top-0 h-screen w-60 border-r border-gray-200 bg-white flex flex-col z-10">
+
+        {/* Logo */}
+        <div className="px-5 pt-6 pb-5">
+          <Link href="/" className="text-xl font-bold text-gray-900 tracking-tight">
+            Cofounder
+          </Link>
+        </div>
+
+        {/* Category nav */}
+        <nav className="flex-1 overflow-y-auto px-3 pb-4">
+          <p className="px-3 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+            Browse
+          </p>
+          <ul className="flex flex-col gap-0.5">
+            <li>
+              <Link
+                href="/"
+                className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  !category
+                    ? 'bg-gray-100 text-gray-900'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                }`}
+              >
+                All
+              </Link>
+            </li>
+            {CATEGORIES.map((cat) => (
+              <li key={cat}>
+                <Link
+                  href={`/?category=${encodeURIComponent(cat)}`}
+                  className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                    category === cat
+                      ? 'bg-gray-100 text-gray-900'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  }`}
+                >
+                  {cat}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Bottom actions */}
+        <div className="border-t border-gray-200 p-4 flex flex-col gap-3">
+          <Link
+            href="/concepts/new"
+            className="rounded-full bg-gray-900 py-2.5 text-sm font-medium text-white text-center hover:bg-gray-700 transition-colors"
+          >
+            Post a Concept
+          </Link>
+
+          {user ? (
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2.5">
+                <Avatar profile={userProfile} size={28} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {userProfile?.full_name ?? user.email}
+                  </p>
+                  <Link
+                    href="/dashboard"
+                    className="text-xs text-gray-400 hover:text-gray-700 transition-colors"
+                  >
+                    My Concepts
+                  </Link>
+                </div>
+              </div>
+              <form action="/auth/signout" method="POST">
+                <button
+                  type="submit"
+                  className="text-xs text-gray-400 hover:text-gray-700 transition-colors"
+                >
+                  Sign out
+                </button>
+              </form>
+            </div>
+          ) : (
+            <form action={signInWithGoogle}>
+              <button
+                type="submit"
+                className="w-full flex items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                <GoogleIcon />
+                Sign in
+              </button>
+            </form>
+          )}
+        </div>
+      </aside>
+
+      {/* Main feed */}
+      <div className="ml-60 flex-1">
+        {error && (
+          <div className="bg-red-50 border-b border-red-200 px-6 py-3 text-sm text-red-700">
+            {decodeURIComponent(error)}
+          </div>
+        )}
+
+        <main className="max-w-2xl mx-auto px-6 py-8">
+          {concepts && concepts.length > 0 ? (
+            <div className="flex flex-col gap-4">
+              {concepts.map((concept) => {
+                const poster = profileMap[concept.user_id]
+                const name = poster?.full_name ?? 'Anonymous'
+                return (
+                  <Link
+                    key={concept.id}
+                    href={`/concepts/${concept.id}`}
+                    className="group rounded-2xl border border-gray-200 overflow-hidden hover:border-gray-300 hover:shadow-md transition-all"
+                  >
+                    {/* Gradient preview */}
+                    <div
+                      className="h-48 relative overflow-hidden"
+                      style={getGradientStyle(concept.category)}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-5">
+                        <h2 className="text-white text-lg font-bold leading-snug line-clamp-2 drop-shadow-sm">
+                          {concept.title}
+                        </h2>
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="px-5 py-4">
+                      <p className="text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed">
+                        {concept.description}
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <Avatar profile={poster} size={20} />
+                        <span className="text-xs text-gray-500">{name}</span>
+                        <span className="text-gray-200 select-none">·</span>
+                        <span className="inline-block rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+                          {concept.category}
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-32 text-center">
+              <p className="text-gray-400 text-lg mb-4">
+                {category ? `No concepts in "${category}" yet.` : 'No concepts posted yet.'}
+              </p>
+              {user ? (
+                <Link
+                  href="/concepts/new"
+                  className="rounded-full bg-gray-900 px-6 py-2 text-sm font-medium text-white hover:bg-gray-700"
+                >
+                  Post the first one
+                </Link>
+              ) : (
+                <p className="text-sm text-gray-400">Sign in to post the first concept.</p>
+              )}
+            </div>
+          )}
+        </main>
+      </div>
+    </div>
   )
 }
