@@ -51,7 +51,6 @@ export default function HeaderClient({
   userProfile: Profile
 }) {
   const pathname = usePathname()
-  const isDashboard = pathname === '/dashboard'
   const showPostButton =
     pathname !== '/dashboard' &&
     pathname !== '/concepts/new' &&
@@ -76,16 +75,6 @@ export default function HeaderClient({
             <Link href="/dashboard">
               <Avatar profile={userProfile} size={28} />
             </Link>
-            {isDashboard && (
-              <form action="/auth/signout" method="POST">
-                <button
-                  type="submit"
-                  className="text-sm text-gray-400 hover:text-gray-700 transition-colors"
-                >
-                  Sign out
-                </button>
-              </form>
-            )}
           </>
         ) : (
           <form action={signInWithGoogle}>

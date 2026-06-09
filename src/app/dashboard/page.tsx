@@ -60,6 +60,36 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-white">
       <main className="max-w-6xl mx-auto px-6 py-10">
+        <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center gap-4">
+            {profile?.avatar_url ? (
+              <Image
+                src={profile.avatar_url}
+                alt={profile.full_name ?? 'Avatar'}
+                width={48}
+                height={48}
+                className="rounded-full object-cover"
+              />
+            ) : (
+              <span className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-base font-semibold text-gray-600">
+                {profile?.full_name?.charAt(0).toUpperCase() ?? '?'}
+              </span>
+            )}
+            <div>
+              <p className="text-base font-semibold text-gray-900">{profile?.full_name ?? 'Anonymous'}</p>
+              <p className="text-sm text-gray-400">{user.email}</p>
+            </div>
+          </div>
+          <form action="/auth/signout" method="POST">
+            <button
+              type="submit"
+              className="text-sm text-gray-400 hover:text-gray-700 transition-colors"
+            >
+              Sign out
+            </button>
+          </form>
+        </div>
+
         <h1 className="text-2xl font-bold text-gray-900 mb-8">Profile</h1>
 
         {typedConcepts.length === 0 ? (
