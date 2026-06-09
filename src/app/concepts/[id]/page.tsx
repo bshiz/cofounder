@@ -124,55 +124,9 @@ export default async function ConceptPage({
       </nav>
 
       <main className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-8 items-start">
 
-          {/* Left column: prototype preview */}
-          <div className="rounded-2xl border border-gray-200 overflow-hidden bg-gray-50">
-            <div className="border-b border-gray-200 px-4 py-2 flex items-center gap-1.5 bg-gray-100">
-              <span className="w-3 h-3 rounded-full bg-red-400" />
-              <span className="w-3 h-3 rounded-full bg-yellow-400" />
-              <span className="w-3 h-3 rounded-full bg-green-400" />
-              <span className="ml-3 text-xs text-gray-400 font-mono truncate flex-1">
-                {concept.prototype_url ?? concept.title} — Live Preview
-              </span>
-            </div>
-            {concept.prototype_url ? (
-              protoEmbeddable ? (
-                <iframe
-                  src={concept.prototype_url}
-                  className="w-full"
-                  style={{ height: '700px', border: 'none' }}
-                  title={`${concept.title} preview`}
-                />
-              ) : (
-                <div className="flex flex-col items-center justify-center gap-4" style={{ height: '700px' }}>
-                  <p className="text-sm text-gray-400">This prototype can&apos;t be embedded.</p>
-                  <a
-                    href={concept.prototype_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-full bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
-                  >
-                    View prototype ↗
-                  </a>
-                </div>
-              )
-            ) : htmlContent ? (
-              <iframe
-                srcDoc={htmlContent}
-                sandbox="allow-scripts"
-                className="w-full"
-                style={{ height: '700px', border: 'none' }}
-                title={`${concept.title} preview`}
-              />
-            ) : (
-              <div className="flex items-center justify-center" style={{ height: '700px' }}>
-                <p className="text-sm text-gray-400">No preview available.</p>
-              </div>
-            )}
-          </div>
-
-          {/* Right column: sticky sidebar */}
+          {/* Left column: sticky sidebar */}
           <div className="sticky top-8 flex flex-col gap-5">
 
             {/* Founder */}
@@ -235,6 +189,52 @@ export default async function ConceptPage({
                     to let the founder know you&apos;re interested.
                   </p>
                 )}
+              </div>
+            )}
+          </div>
+
+          {/* Right column: prototype preview */}
+          <div className="rounded-2xl border border-gray-200 overflow-hidden bg-gray-50">
+            <div className="border-b border-gray-200 px-4 py-2 flex items-center gap-1.5 bg-gray-100">
+              <span className="w-3 h-3 rounded-full bg-red-400" />
+              <span className="w-3 h-3 rounded-full bg-yellow-400" />
+              <span className="w-3 h-3 rounded-full bg-green-400" />
+              <span className="ml-3 text-xs text-gray-400 font-mono truncate flex-1">
+                {concept.prototype_url ?? concept.title} — Live Preview
+              </span>
+            </div>
+            {concept.prototype_url ? (
+              protoEmbeddable ? (
+                <iframe
+                  src={concept.prototype_url}
+                  className="w-full"
+                  style={{ height: '700px', border: 'none' }}
+                  title={`${concept.title} preview`}
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center gap-4" style={{ height: '700px' }}>
+                  <p className="text-sm text-gray-400">This prototype can&apos;t be embedded.</p>
+                  <a
+                    href={concept.prototype_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+                  >
+                    View prototype ↗
+                  </a>
+                </div>
+              )
+            ) : htmlContent ? (
+              <iframe
+                srcDoc={htmlContent}
+                sandbox="allow-scripts"
+                className="w-full"
+                style={{ height: '700px', border: 'none' }}
+                title={`${concept.title} preview`}
+              />
+            ) : (
+              <div className="flex items-center justify-center" style={{ height: '700px' }}>
+                <p className="text-sm text-gray-400">No preview available.</p>
               </div>
             )}
           </div>
