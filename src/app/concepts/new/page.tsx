@@ -2,7 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { createConcept } from '@/app/actions'
 import PrototypeInput from './PrototypeInput'
-import Header from '@/app/components/Header'
 
 const CATEGORIES = [
   'Developer Tools',
@@ -33,9 +32,7 @@ export default async function NewConceptPage({
   }
 
   return (
-    <div className="min-h-screen bg-white pt-12">
-      <Header showPostButton={false} />
-
+    <div className="min-h-screen bg-white">
       <main className="max-w-2xl mx-auto px-6 py-12">
         <h1 className="text-2xl font-bold text-gray-900 mb-8">Share your concept</h1>
 

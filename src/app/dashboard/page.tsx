@@ -2,7 +2,6 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import Header from '@/app/components/Header'
 
 type Profile = { full_name: string | null; avatar_url: string | null } | null | undefined
 
@@ -59,9 +58,7 @@ export default async function DashboardPage() {
   const typedConcepts = (concepts ?? []) as Concept[]
 
   return (
-    <div className="min-h-screen bg-white pt-12">
-      <Header showSignOut={true} showPostButton={false} />
-
+    <div className="min-h-screen bg-white">
       <main className="max-w-6xl mx-auto px-6 py-10">
         <h1 className="text-2xl font-bold text-gray-900 mb-8">Profile</h1>
 

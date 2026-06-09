@@ -1,10 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
 import Image from 'next/image'
-import InterestForm from './InterestForm'
-import DeleteButton from './DeleteButton'
-import Header from '@/app/components/Header'
+import ConceptBar from './ConceptBar'
 
 type Profile = { full_name: string | null; avatar_url: string | null } | null
 
@@ -27,7 +24,7 @@ async function checkEmbeddable(url: string): Promise<boolean> {
   }
 }
 
-function Avatar({ profile, size = 32 }: { profile: Profile; size?: number }) {
+function Avatar({ profile, size = 26 }: { profile: Profile; size?: number }) {
   if (profile?.avatar_url) {
     return (
       <Image
@@ -43,7 +40,7 @@ function Avatar({ profile, size = 32 }: { profile: Profile; size?: number }) {
   const initial = profile?.full_name?.charAt(0).toUpperCase() ?? '?'
   return (
     <span
-      className="rounded-full bg-gray-200 flex items-center justify-center text-sm font-semibold text-gray-600 shrink-0"
+      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600 shrink-0"
       style={{ width: size, height: size }}
     >
       {initial}
@@ -117,131 +114,74 @@ export default async function ConceptPage({
   }
 
   return (
-    <div className="min-h-screen bg-white pt-12">
-      <Header />
+    <div className="pb-16">
+      {/* Prototype iframe: fills viewport minus header (3rem) and sticky bar (4rem) */}
+      <div style={{ height: 'calc(100vh - 3rem - 4rem)' }} className="relative bg-gray-50 flex flex-col">
+        {/* Browser chrome bar */}
+        <div className="border-b border-gray-200 px-4 py-2 flex items-center gap-1.5 bg-gray-100 shrink-0">
+          <span className="w-3 h-3 rounded-full bg-red-400" />
+          <span className="w-3 h-3 rounded-full bg-yellow-400" />
+          <span className="w-3 h-3 rounded-full bg-green-400" />
+          <span className="ml-3 text-xs text-gray-400 font-mono truncate flex-1">
+            {concept.prototype_url ?? concept.title} — Live Preview
+          </span>
+        </div>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-8 items-start">
-
-          {/* Left column: sticky sidebar */}
-          <div className="sticky top-8 flex flex-col gap-5">
-
-            {/* Founder */}
-            <div className="flex items-center gap-2.5">
-              <Avatar profile={poster} size={32} />
-              <span className="text-sm text-gray-500">{poster?.full_name ?? 'Anonymous'}</span>
-            </div>
-
-            {/* Title */}
-            <h1 className="text-2xl font-bold text-gray-900 leading-snug">{concept.title}</h1>
-
-            {/* Description */}
-            <p className="text-sm text-gray-600 leading-relaxed">{concept.description}</p>
-
-            {/* Category */}
-            <span className="self-start inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
-              {concept.category}
-            </span>
-
-            <div className="border-t border-gray-100" />
-
-            {/* Owner actions */}
-            {isOwner && (
-              <div className="flex flex-col gap-3">
-                <Link
-                  href={`/concepts/${id}/edit`}
-                  className="rounded-full border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors text-center"
-                >
-                  Edit concept
-                </Link>
-                <DeleteButton conceptId={id} />
-              </div>
-            )}
-
-            {/* Non-owner: interest form */}
-            {!isOwner && (
-              <div>
-                {error && (
-                  <div className="mb-4 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-                    {decodeURIComponent(error)}
-                  </div>
-                )}
-
-                {success ? (
-                  <div className="rounded-xl bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
-                    Your interest has been sent to the founder.
-                  </div>
-                ) : existingInterest ? (
-                  <div className="rounded-xl bg-gray-50 border border-gray-200 px-4 py-3">
-                    <p className="text-sm font-medium text-gray-700 mb-1">You&apos;ve already expressed interest</p>
-                    <p className="text-sm text-gray-500 italic">&ldquo;{existingInterest.reason}&rdquo;</p>
-                  </div>
-                ) : user ? (
-                  <InterestForm conceptId={id} />
-                ) : (
-                  <p className="text-sm text-gray-500">
-                    <Link href="/?error=Sign+in+to+express+interest" className="underline hover:text-gray-900">
-                      Sign in
-                    </Link>{' '}
-                    to let the founder know you&apos;re interested.
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Right column: prototype preview */}
-          <div className="rounded-2xl border border-gray-200 overflow-hidden bg-gray-50">
-            <div className="border-b border-gray-200 px-4 py-2 flex items-center gap-1.5 bg-gray-100">
-              <span className="w-3 h-3 rounded-full bg-red-400" />
-              <span className="w-3 h-3 rounded-full bg-yellow-400" />
-              <span className="w-3 h-3 rounded-full bg-green-400" />
-              <span className="ml-3 text-xs text-gray-400 font-mono truncate flex-1">
-                {concept.prototype_url ?? concept.title} — Live Preview
-              </span>
-            </div>
-            {concept.prototype_url ? (
-              protoEmbeddable ? (
-                <iframe
-                  src={concept.prototype_url}
-                  className="w-full"
-                  style={{ height: '700px', border: 'none' }}
-                  title={`${concept.title} preview`}
-                />
-              ) : (
-                <div className="flex flex-col items-center justify-center gap-4" style={{ height: '700px' }}>
-                  <p className="text-sm text-gray-400">This prototype can&apos;t be embedded.</p>
-                  <a
-                    href={concept.prototype_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-full bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
-                  >
-                    View prototype ↗
-                  </a>
-                </div>
-              )
-            ) : htmlContent ? (
+        {/* Iframe fills remaining height */}
+        <div className="flex-1 overflow-hidden">
+          {concept.prototype_url ? (
+            protoEmbeddable ? (
               <iframe
-                srcDoc={htmlContent}
-                sandbox="allow-scripts"
-                className="w-full"
-                style={{ height: '700px', border: 'none' }}
+                src={concept.prototype_url}
+                className="w-full h-full"
+                style={{ border: 'none' }}
                 title={`${concept.title} preview`}
               />
             ) : (
-              <div className="flex items-center justify-center" style={{ height: '700px' }}>
-                <p className="text-sm text-gray-400">No preview available.</p>
+              <div className="flex flex-col items-center justify-center h-full gap-4">
+                <p className="text-sm text-gray-400">This prototype can&apos;t be embedded.</p>
+                <a
+                  href={concept.prototype_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-full bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+                >
+                  View prototype ↗
+                </a>
               </div>
-            )}
+            )
+          ) : htmlContent ? (
+            <iframe
+              srcDoc={htmlContent}
+              sandbox="allow-scripts"
+              className="w-full h-full"
+              style={{ border: 'none' }}
+              title={`${concept.title} preview`}
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-sm text-gray-400">No preview available.</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Concept info + owner interests list */}
+      <div className="max-w-2xl mx-auto px-6 py-8">
+        <div className="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2 leading-snug">{concept.title}</h1>
+            <p className="text-sm text-gray-600 leading-relaxed">{concept.description}</p>
           </div>
+          <span className="shrink-0 inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600 mt-1">
+            {concept.category}
+          </span>
         </div>
 
-        {/* Owner: interests list below the two-column layout */}
         {isOwner && (
-          <div className="mt-12 max-w-2xl">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              Interest{' '}
+          <div className="mt-8 border-t border-gray-100 pt-8">
+            <h2 className="text-base font-semibold text-gray-900 mb-4">
+              Interested{' '}
               {interests.length > 0 && (
                 <span className="text-gray-400 font-normal">({interests.length})</span>
               )}
@@ -270,7 +210,18 @@ export default async function ConceptPage({
             )}
           </div>
         )}
-      </main>
+      </div>
+
+      <ConceptBar
+        poster={poster}
+        conceptId={id}
+        conceptTitle={concept.title}
+        isOwner={isOwner}
+        isLoggedIn={!!user}
+        existingInterest={existingInterest}
+        success={!!success}
+        error={error}
+      />
     </div>
   )
 }

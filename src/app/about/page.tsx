@@ -1,10 +1,6 @@
-import Header from '@/app/components/Header'
-
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white pt-12">
-      <Header showPostButton={true} />
-
+    <div className="min-h-screen bg-white">
       <main className="max-w-2xl mx-auto px-6 py-16">
         <h1
           className="text-4xl font-bold text-gray-900 mb-8 leading-tight"
