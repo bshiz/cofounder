@@ -69,6 +69,22 @@ export default async function NewConceptPage({
           </div>
 
           <div className="flex flex-col gap-1.5">
+            <label htmlFor="collaborator_description" className="text-sm font-medium text-gray-700">
+              What are you looking for in a collaborator?
+            </label>
+            <p className="text-xs text-gray-400 -mt-0.5">
+              Describe the skills, perspective, or background that would complement yours — be specific about what you need to take this further.
+            </p>
+            <textarea
+              id="collaborator_description"
+              name="collaborator_description"
+              rows={3}
+              placeholder="e.g. Someone with sales or go-to-market experience, ideally in healthcare..."
+              className="rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 resize-none"
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
             <label htmlFor="category" className="text-sm font-medium text-gray-700">
               Category
             </label>

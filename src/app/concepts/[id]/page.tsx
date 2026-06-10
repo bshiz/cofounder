@@ -98,15 +98,24 @@ export default async function ConceptPage({
 
       {/* Concept info + owner interests list */}
       <div className="max-w-2xl mx-auto px-6 py-8">
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2 leading-snug">{concept.title}</h1>
-            <p className="text-sm text-gray-600 leading-relaxed">{concept.description}</p>
-          </div>
+        {/* Title + category */}
+        <div className="flex items-start justify-between gap-4 mb-5">
+          <h1 className="text-2xl font-bold text-gray-900 leading-snug">{concept.title}</h1>
           <span className="shrink-0 inline-block rounded-full bg-accent px-3 py-1 text-xs font-medium text-white mt-1">
             {concept.category}
           </span>
         </div>
+
+        {/* Description */}
+        <p className="text-sm text-gray-600 leading-relaxed mb-6">{concept.description}</p>
+
+        {/* Looking for */}
+        {concept.collaborator_description && (
+          <div className="border-t border-gray-100 pt-6 mb-6">
+            <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Looking for</h2>
+            <p className="text-sm text-gray-600 leading-relaxed">{concept.collaborator_description}</p>
+          </div>
+        )}
 
         {isOwner && (
           <div className="mt-8 border-t border-gray-100 pt-8">

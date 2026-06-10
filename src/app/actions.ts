@@ -33,6 +33,7 @@ export async function createConcept(formData: FormData) {
 
   const title = (formData.get('title') as string).trim()
   const description = (formData.get('description') as string).trim()
+  const collaboratorDescription = (formData.get('collaborator_description') as string | null)?.trim() || null
   const category = formData.get('category') as string
   const prototypeUrl = (formData.get('prototype_url') as string | null)?.trim() || null
   const htmlFile = formData.get('html_file') as File
@@ -62,7 +63,7 @@ export async function createConcept(formData: FormData) {
 
   const { data: concept, error: insertError } = await supabase
     .from('concepts')
-    .insert({ user_id: user.id, title, description, category, prototype_url: prototypeUrl, html_file_url })
+    .insert({ user_id: user.id, title, description, collaborator_description: collaboratorDescription, category, prototype_url: prototypeUrl, html_file_url })
     .select('id')
     .single()
 
@@ -161,6 +162,7 @@ export async function updateConcept(formData: FormData) {
   const conceptId = formData.get('concept_id') as string
   const title = (formData.get('title') as string).trim()
   const description = (formData.get('description') as string).trim()
+  const collaboratorDescription = (formData.get('collaborator_description') as string | null)?.trim() || null
   const category = formData.get('category') as string
   const prototypeUrl = (formData.get('prototype_url') as string | null)?.trim() || null
   const htmlFile = formData.get('html_file') as File
@@ -216,7 +218,7 @@ export async function updateConcept(formData: FormData) {
 
   const { error: updateError } = await supabase
     .from('concepts')
-    .update({ title, description, category, prototype_url: prototypeUrl, html_file_url })
+    .update({ title, description, collaborator_description: collaboratorDescription, category, prototype_url: prototypeUrl, html_file_url })
     .eq('id', conceptId)
     .eq('user_id', user.id)
 
