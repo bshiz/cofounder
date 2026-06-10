@@ -1,5 +1,6 @@
 import { createClient, getUser } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { createConcept } from '@/app/actions'
 import PrototypeInput from './PrototypeInput'
 
@@ -108,12 +109,20 @@ export default async function NewConceptPage({
 
           <PrototypeInput />
 
-          <button
-            type="submit"
-            className="mt-2 rounded-full bg-brand py-3 text-sm font-medium text-white transition-colors hover:bg-brand-dark"
-          >
-            Post concept
-          </button>
+          <div className="flex items-center gap-3 mt-2">
+            <button
+              type="submit"
+              className="rounded-full bg-brand px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-dark"
+            >
+              Share concept
+            </button>
+            <Link
+              href="/"
+              className="rounded-full border border-gray-300 px-6 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </Link>
+          </div>
         </form>
       </main>
     </div>
