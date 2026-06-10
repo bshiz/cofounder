@@ -114,7 +114,7 @@ export default function ConceptBar({
           }}
         >
           <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4 shadow-xl">
-            <h2 className="text-base font-semibold text-gray-900 mb-1">Express interest</h2>
+            <h2 className="text-base font-semibold text-gray-900 mb-1">Let&apos;s build this</h2>
             <p className="text-sm text-gray-500 mb-4">
               Tell the founder why you&apos;re interested in building this together.
             </p>
