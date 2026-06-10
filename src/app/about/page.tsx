@@ -4,7 +4,6 @@ export default function AboutPage() {
       <main className="max-w-2xl mx-auto px-6 py-16">
         <h1
           className="text-4xl font-bold text-gray-900 mb-8 leading-tight"
-          style={{ fontFamily: 'var(--font-display)' }}
         >
           What is Kindred?
         </h1>

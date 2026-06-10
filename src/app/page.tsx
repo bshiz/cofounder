@@ -89,7 +89,7 @@ export default async function Home({
       )}
       <main className="max-w-2xl mx-auto px-6 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2 leading-tight" style={{ fontFamily: 'var(--font-display)' }}>Where makers find each other</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2 leading-tight">Where makers find each other</h1>
           <p className="text-gray-500">Share what you&apos;re building and find someone who can&apos;t wait to work on it with you.</p>
         </div>
 

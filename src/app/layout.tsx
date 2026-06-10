@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Plus_Jakarta_Sans, Fraunces } from 'next/font/google'
+import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import { Suspense } from 'react'
 import { createClient, getUser } from '@/lib/supabase/server'
@@ -12,11 +12,6 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   display: 'swap',
 })
 
-const fraunces = Fraunces({
-  variable: '--font-display',
-  subsets: ['latin'],
-  display: 'swap',
-})
 
 export const metadata: Metadata = {
   title: 'Kindred',
@@ -45,17 +40,17 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakartaSans.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${plusJakartaSans.variable} h-full antialiased`}
     >
       <body className="min-h-full">
         <HeaderClient user={serializedUser} userProfile={userProfile} />
-        <div className="flex pt-12">
-          <aside className="fixed left-0 top-12 h-[calc(100vh-3rem)] w-56 border-r border-gray-200 bg-white overflow-y-auto z-10">
+        <div className="flex pt-16">
+          <aside className="fixed left-0 top-16 h-[calc(100vh-4rem)] w-56 border-r border-gray-200 bg-white overflow-y-auto z-10">
             <Suspense fallback={null}>
               <SidebarNav />
             </Suspense>
           </aside>
-          <div className="ml-56 flex-1 min-h-[calc(100vh-3rem)]">
+          <div className="ml-56 flex-1 min-h-[calc(100vh-4rem)]">
             {children}
           </div>
         </div>

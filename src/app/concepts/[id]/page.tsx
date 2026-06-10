@@ -87,8 +87,8 @@ export default async function ConceptPage({
 
   return (
     <div className="pb-16">
-      {/* Prototype preview: fills viewport minus header (3rem) and sticky bar (4rem) */}
-      <div style={{ height: 'calc(100vh - 3rem - 4rem)' }}>
+      {/* Prototype preview: fills viewport minus header (4rem) and sticky bar (4rem) */}
+      <div style={{ height: 'calc(100vh - 4rem - 4rem)' }}>
         <PrototypePreview
           prototypeUrl={concept.prototype_url}
           htmlFileUrl={concept.html_file_url}
