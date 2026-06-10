@@ -90,14 +90,14 @@ export default function ConceptBar({
           ) : isLoggedIn ? (
             <button
               onClick={() => setModalOpen(true)}
-              className="rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
+              className="rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-white hover:bg-accent-dark transition-colors"
             >
-              Express interest
+              Let&apos;s build this
             </button>
           ) : (
             <Link
               href="/?error=Sign+in+to+express+interest"
-              className="rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
+              className="rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-white hover:bg-accent-dark transition-colors"
             >
               Sign in to express interest
             </Link>
