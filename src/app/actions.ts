@@ -37,6 +37,7 @@ export async function createConcept(formData: FormData) {
   const category = formData.get('category') as string
   const prototypeUrl = (formData.get('prototype_url') as string | null)?.trim() || null
   const htmlFile = formData.get('html_file') as File
+  const thumbnailFile = formData.get('thumbnail_file') as File
 
   if (!title || !description || !category) {
     redirect('/concepts/new?error=All+fields+are+required')
@@ -61,9 +62,26 @@ export async function createConcept(formData: FormData) {
     html_file_url = supabase.storage.from('concepts').getPublicUrl(upload.path).data.publicUrl
   }
 
+  let thumbnail_url: string | null = null
+
+  if (thumbnailFile?.size) {
+    const ext = thumbnailFile.name.split('.').pop() || 'jpg'
+    const thumbPath = `thumbnails/${user.id}/${Date.now()}.${ext}`
+
+    const { data: thumbUpload, error: thumbError } = await supabase.storage
+      .from('concepts')
+      .upload(thumbPath, thumbnailFile, { contentType: thumbnailFile.type, upsert: false })
+
+    if (thumbError) {
+      redirect(`/concepts/new?error=${encodeURIComponent(thumbError.message)}`)
+    }
+
+    thumbnail_url = supabase.storage.from('concepts').getPublicUrl(thumbUpload.path).data.publicUrl
+  }
+
   const { data: concept, error: insertError } = await supabase
     .from('concepts')
-    .insert({ user_id: user.id, title, description, collaborator_description: collaboratorDescription, category, prototype_url: prototypeUrl, html_file_url })
+    .insert({ user_id: user.id, title, description, collaborator_description: collaboratorDescription, category, prototype_url: prototypeUrl, html_file_url, thumbnail_url })
     .select('id')
     .single()
 
@@ -123,7 +141,7 @@ export async function expressInterest(formData: FormData) {
       const interestedName = user.user_metadata?.full_name ?? user.email ?? 'Someone'
       const appUrl = 'https://cofounder-indol.vercel.app'
 
-      if (ownerEmail && process.env.RESEND_API_KEY) {
+      if (ownerEmail && process.env.RESEND_API_KEY && process.env.FROM_EMAIL) {
         await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: {
@@ -131,14 +149,14 @@ export async function expressInterest(formData: FormData) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: 'Kindred <notifications@cofounder-indol.vercel.app>',
+            from: process.env.FROM_EMAIL,
             to: ownerEmail,
-            subject: `${interestedName} is interested in "${concept.title}"`,
+            subject: `${interestedName} wants to build "${concept.title}" with you`,
             html: `
               <p>Hi,</p>
-              <p><strong>${interestedName}</strong> expressed interest in your concept <strong>${concept.title}</strong>.</p>
-              <p><em>"${reason}"</em></p>
-              <p><a href="${appUrl}/dashboard">View your dashboard</a> to see everyone who's interested.</p>
+              <p><strong>${interestedName}</strong> expressed interest in building <strong>${concept.title}</strong> with you.</p>
+              <p><em>&ldquo;${reason}&rdquo;</em></p>
+              <p><a href="${appUrl}/concepts/${conceptId}">View the concept</a> or <a href="${appUrl}/dashboard">go to your dashboard</a> to see everyone who&apos;s interested.</p>
             `,
           }),
         })
@@ -166,6 +184,7 @@ export async function updateConcept(formData: FormData) {
   const category = formData.get('category') as string
   const prototypeUrl = (formData.get('prototype_url') as string | null)?.trim() || null
   const htmlFile = formData.get('html_file') as File
+  const thumbnailFile = formData.get('thumbnail_file') as File
 
   if (!title || !description || !category) {
     redirect(`/concepts/${conceptId}/edit?error=All+fields+are+required`)
@@ -174,7 +193,7 @@ export async function updateConcept(formData: FormData) {
   // Verify ownership
   const { data: existing } = await supabase
     .from('concepts')
-    .select('user_id, html_file_url, prototype_url')
+    .select('user_id, html_file_url, prototype_url, thumbnail_url')
     .eq('id', conceptId)
     .single()
 
@@ -216,9 +235,39 @@ export async function updateConcept(formData: FormData) {
     html_file_url = supabase.storage.from('concepts').getPublicUrl(upload.path).data.publicUrl
   }
 
+  // Replace thumbnail only if a new one was uploaded
+  let thumbnail_url = existing.thumbnail_url
+  if (thumbnailFile?.size > 0) {
+    const ext = thumbnailFile.name.split('.').pop() || 'jpg'
+    const thumbPath = `thumbnails/${user.id}/${Date.now()}.${ext}`
+
+    const { data: thumbUpload, error: thumbError } = await supabase.storage
+      .from('concepts')
+      .upload(thumbPath, thumbnailFile, { contentType: thumbnailFile.type, upsert: false })
+
+    if (thumbError) {
+      redirect(`/concepts/${conceptId}/edit?error=${encodeURIComponent(thumbError.message)}`)
+    }
+
+    // Delete old thumbnail (best-effort)
+    if (existing.thumbnail_url) {
+      try {
+        const oldThumbPath = new URL(existing.thumbnail_url).pathname.replace(
+          '/storage/v1/object/public/concepts/',
+          ''
+        )
+        await supabase.storage.from('concepts').remove([oldThumbPath])
+      } catch {
+        // Non-fatal
+      }
+    }
+
+    thumbnail_url = supabase.storage.from('concepts').getPublicUrl(thumbUpload.path).data.publicUrl
+  }
+
   const { error: updateError } = await supabase
     .from('concepts')
-    .update({ title, description, collaborator_description: collaboratorDescription, category, prototype_url: prototypeUrl, html_file_url })
+    .update({ title, description, collaborator_description: collaboratorDescription, category, prototype_url: prototypeUrl, html_file_url, thumbnail_url })
     .eq('id', conceptId)
     .eq('user_id', user.id)
 

@@ -57,7 +57,7 @@ export default async function Home({
 
   let query = supabase
     .from('concepts')
-    .select('id, title, description, category, created_at, user_id')
+    .select('id, title, description, category, created_at, user_id, thumbnail_url')
     .order('created_at', { ascending: false })
 
   if (category) {
@@ -104,11 +104,20 @@ export default async function Home({
                   href={`/concepts/${concept.id}`}
                   className="group rounded-2xl border border-gray-200 overflow-hidden hover:border-gray-300 hover:shadow-md transition-all"
                 >
-                  {/* Gradient preview */}
+                  {/* Card preview */}
                   <div
                     className="h-48 relative overflow-hidden"
-                    style={getGradientStyle(concept.category)}
+                    style={concept.thumbnail_url ? undefined : getGradientStyle(concept.category)}
                   >
+                    {concept.thumbnail_url && (
+                      <Image
+                        src={concept.thumbnail_url}
+                        alt={concept.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 672px"
+                        className="object-cover"
+                      />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-5">
                       <h2 className="text-white text-lg font-bold leading-snug line-clamp-2 drop-shadow-sm">

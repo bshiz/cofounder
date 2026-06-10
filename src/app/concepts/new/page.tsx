@@ -109,6 +109,23 @@ export default async function NewConceptPage({
 
           <PrototypeInput />
 
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="thumbnail_file" className="text-sm font-medium text-gray-700">
+              Thumbnail image
+              <span className="ml-1.5 text-gray-400 font-normal">(optional)</span>
+            </label>
+            <p className="text-xs text-gray-400 -mt-0.5">
+              Upload a screenshot or image that represents your concept — this is what people will see in the feed
+            </p>
+            <input
+              id="thumbnail_file"
+              name="thumbnail_file"
+              type="file"
+              accept="image/*"
+              className="rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-900 file:mr-4 file:rounded-full file:border-0 file:bg-gray-100 file:px-4 file:py-1.5 file:text-xs file:font-medium file:text-gray-700 hover:file:bg-gray-200 focus:outline-none"
+            />
+          </div>
+
           <div className="flex items-center justify-end gap-3 mt-2">
             <button
               type="submit"
