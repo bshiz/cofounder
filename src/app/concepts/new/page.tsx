@@ -109,7 +109,7 @@ export default async function NewConceptPage({
 
           <PrototypeInput />
 
-          <div className="flex items-center gap-3 mt-2">
+          <div className="flex items-center justify-end gap-3 mt-2">
             <button
               type="submit"
               className="rounded-full bg-brand px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-dark"
