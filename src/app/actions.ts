@@ -130,7 +130,7 @@ export async function expressInterest(formData: FormData) {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: 'Cofounder <notifications@cofounder-indol.vercel.app>',
+            from: 'Kindred <notifications@cofounder-indol.vercel.app>',
             to: ownerEmail,
             subject: `${interestedName} is interested in "${concept.title}"`,
             html: `

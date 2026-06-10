@@ -6,10 +6,10 @@ export default function AboutPage() {
           className="text-4xl font-bold text-gray-900 mb-8 leading-tight"
           style={{ fontFamily: 'var(--font-display)' }}
         >
-          What is Cofounder?
+          What is Kindred?
         </h1>
         <p className="text-gray-600 leading-relaxed text-base">
-          Cofounder is a place for anyone who has started building something and wants to find
+          Kindred is a place for anyone who has started building something and wants to find
           someone to build it with. The prototype is the profile — instead of a resume or a skills
           list, you show what you&apos;re actually working on. A working prototype says more about a
           person than anything else. It shows how they think, what problems they find worth solving,

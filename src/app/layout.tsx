@@ -19,8 +19,8 @@ const fraunces = Fraunces({
 })
 
 export const metadata: Metadata = {
-  title: 'Cofounder',
-  description: 'Find your perfect co-founder',
+  title: 'Kindred',
+  description: 'Where makers find each other',
 }
 
 export default async function RootLayout({

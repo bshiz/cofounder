@@ -65,7 +65,7 @@ export default async function Header({
   return (
     <header className="fixed top-0 left-0 right-0 z-20 h-12 border-b border-gray-200 bg-white flex items-center justify-between px-5">
       <Link href="/" className="text-base font-bold text-gray-900 tracking-tight">
-        Cofounder
+        Kindred
       </Link>
       <div className="flex items-center gap-3">
         {user ? (
