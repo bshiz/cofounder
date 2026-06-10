@@ -6,7 +6,7 @@ type State =
   | { type: 'loading' }
   | { type: 'url-embeddable'; url: string }
   | { type: 'url-blocked'; url: string }
-  | { type: 'html'; url: string }
+  | { type: 'html'; content: string }
   | { type: 'none' }
 
 export default function PrototypePreview({
@@ -18,33 +18,31 @@ export default function PrototypePreview({
   htmlFileUrl?: string | null
   title: string
 }) {
-  const [state, setState] = useState<State>(() => {
-    if (prototypeUrl) return { type: 'loading' }
-    if (htmlFileUrl) return { type: 'html', url: htmlFileUrl }
-    return { type: 'none' }
-  })
+  const [state, setState] = useState<State>({ type: 'loading' })
 
   useEffect(() => {
-    if (!prototypeUrl) return
+    if (prototypeUrl) {
+      fetch(`/api/check-embeddable?url=${encodeURIComponent(prototypeUrl)}`)
+        .then((r) => r.json())
+        .then(({ embeddable }: { embeddable: boolean }) => {
+          setState(
+            embeddable
+              ? { type: 'url-embeddable', url: prototypeUrl }
+              : { type: 'url-blocked', url: prototypeUrl }
+          )
+        })
+        .catch(() => setState({ type: 'url-blocked', url: prototypeUrl }))
+    } else if (htmlFileUrl) {
+      fetch(htmlFileUrl)
+        .then((r) => (r.ok ? r.text() : '<p>Could not load preview.</p>'))
+        .then((content) => setState({ type: 'html', content }))
+        .catch(() => setState({ type: 'html', content: '<p>Could not load preview.</p>' }))
+    } else {
+      setState({ type: 'none' })
+    }
+  }, [prototypeUrl, htmlFileUrl])
 
-    fetch(`/api/check-embeddable?url=${encodeURIComponent(prototypeUrl)}`)
-      .then((r) => r.json())
-      .then(({ embeddable }: { embeddable: boolean }) => {
-        setState(
-          embeddable
-            ? { type: 'url-embeddable', url: prototypeUrl }
-            : { type: 'url-blocked', url: prototypeUrl }
-        )
-      })
-      .catch(() => {
-        setState({ type: 'url-blocked', url: prototypeUrl })
-      })
-  }, [prototypeUrl])
-
-  const chromeLabel =
-    state.type === 'url-embeddable' || state.type === 'url-blocked' || state.type === 'loading'
-      ? (prototypeUrl ?? title)
-      : (htmlFileUrl ?? title)
+  const chromeLabel = prototypeUrl ?? htmlFileUrl ?? title
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
@@ -91,7 +89,8 @@ export default function PrototypePreview({
 
         {state.type === 'html' && (
           <iframe
-            src={state.url}
+            srcDoc={state.content}
+            sandbox="allow-scripts"
             className="w-full h-full"
             style={{ border: 'none' }}
             title={`${title} preview`}
