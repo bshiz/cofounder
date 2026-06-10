@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, getUser } from '@/lib/supabase/server'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -53,10 +53,7 @@ export default async function Home({
   searchParams: Promise<{ category?: string; error?: string }>
 }) {
   const { category, error } = await searchParams
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const [supabase, user] = await Promise.all([createClient(), getUser()])
 
   let query = supabase
     .from('concepts')

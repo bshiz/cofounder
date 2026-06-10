@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, getUser } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { createConcept } from '@/app/actions'
 import PrototypeInput from './PrototypeInput'
@@ -22,10 +22,7 @@ export default async function NewConceptPage({
   searchParams: Promise<{ error?: string }>
 }) {
   const { error } = await searchParams
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getUser()
 
   if (!user) {
     redirect('/?error=Sign+in+to+post+a+concept')

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, getUser } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -30,10 +30,7 @@ function Avatar({ profile, size = 22 }: { profile: Profile; size?: number }) {
 }
 
 export default async function DashboardPage() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const [supabase, user] = await Promise.all([createClient(), getUser()])
 
   if (!user) redirect('/?error=Sign+in+to+view+your+concepts')
 

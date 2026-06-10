@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, getUser } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { updateConcept } from '@/app/actions'
@@ -25,12 +25,9 @@ export default async function EditConceptPage({
 }) {
   const { id } = await params
   const { error } = await searchParams
-  const supabase = await createClient()
+  const [supabase, user] = await Promise.all([createClient(), getUser()])
 
-  const [{ data: concept }, { data: { user } }] = await Promise.all([
-    supabase.from('concepts').select('*').eq('id', id).single(),
-    supabase.auth.getUser(),
-  ])
+  const { data: concept } = await supabase.from('concepts').select('*').eq('id', id).single()
 
   if (!concept) notFound()
   if (!user || user.id !== concept.user_id) redirect('/?error=Not+authorized')

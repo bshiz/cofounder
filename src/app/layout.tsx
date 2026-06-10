@@ -2,18 +2,20 @@ import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans, Fraunces } from 'next/font/google'
 import './globals.css'
 import { Suspense } from 'react'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, getUser } from '@/lib/supabase/server'
 import HeaderClient from './components/HeaderClient'
 import SidebarNav from './components/SidebarNav'
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: '--font-sans',
   subsets: ['latin'],
+  display: 'swap',
 })
 
 const fraunces = Fraunces({
   variable: '--font-display',
   subsets: ['latin'],
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -26,10 +28,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const [user, supabase] = await Promise.all([getUser(), createClient()])
 
   let userProfile: { full_name: string | null; avatar_url: string | null } | null = null
   if (user) {
