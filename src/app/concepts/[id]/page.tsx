@@ -88,30 +88,32 @@ export default async function ConceptPage({
   return (
     <div className="pb-16">
       {/* Top section: concept info above the fold */}
-      <div className="max-w-2xl mx-auto px-6 py-8">
-        {/* Founder */}
-        <div className="flex items-center gap-2.5 mb-5">
-          <Avatar profile={poster} size={32} />
-          <span className="text-sm text-gray-500">{poster?.full_name ?? 'Anonymous'}</span>
-        </div>
-
-        {/* Title + category */}
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <h1 className="text-2xl font-bold text-gray-900 leading-snug">{concept.title}</h1>
-          <span className="shrink-0 inline-block rounded-full bg-accent px-3 py-1 text-xs font-medium text-white mt-1">
+      <div className="px-8 py-6">
+        {/* Founder + category row */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2.5">
+            <Avatar profile={poster} size={28} />
+            <span className="text-sm text-gray-500">{poster?.full_name ?? 'Anonymous'}</span>
+          </div>
+          <span className="shrink-0 inline-block rounded-full bg-accent px-3 py-1 text-xs font-medium text-white">
             {concept.category}
           </span>
         </div>
 
-        {/* Description */}
-        <p className="text-sm text-gray-600 leading-relaxed">{concept.description}</p>
+        {/* Title */}
+        <h1 className="text-2xl font-bold text-gray-900 leading-snug mb-4">{concept.title}</h1>
 
-        {/* Looking for */}
-        {concept.collaborator_description && (
-          <div className="mt-6 border-t border-gray-100 pt-6">
-            <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Looking for</h2>
-            <p className="text-sm text-gray-600 leading-relaxed">{concept.collaborator_description}</p>
+        {/* Description + Looking for: two columns if both present, single column otherwise */}
+        {concept.collaborator_description ? (
+          <div className="grid grid-cols-2 gap-8">
+            <p className="text-sm text-gray-600 leading-relaxed">{concept.description}</p>
+            <div>
+              <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Looking for</h2>
+              <p className="text-sm text-gray-600 leading-relaxed">{concept.collaborator_description}</p>
+            </div>
           </div>
+        ) : (
+          <p className="text-sm text-gray-600 leading-relaxed max-w-2xl">{concept.description}</p>
         )}
       </div>
 

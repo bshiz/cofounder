@@ -56,53 +56,39 @@ export default function ConceptBar({
 
   return (
     <>
-      <div className="fixed bottom-0 left-56 right-0 h-16 bg-white border-t border-gray-200 flex items-center justify-between px-6 z-10">
-        {/* Left: founder */}
-        <div className="flex items-center gap-2.5 min-w-0 flex-1">
-          <Avatar profile={poster} size={28} />
-          <span className="text-sm text-gray-600 truncate">{poster?.full_name ?? 'Anonymous'}</span>
-        </div>
-
-        {/* Center: title */}
-        <p className="text-sm font-semibold text-gray-900 truncate max-w-xs px-4 hidden md:block flex-1 text-center">
-          {conceptTitle}
-        </p>
-
-        {/* Right: action */}
-        <div className="flex items-center gap-2 shrink-0 flex-1 justify-end">
-          {error && (
-            <span className="text-xs text-red-500 mr-2 hidden sm:block">
-              {decodeURIComponent(error)}
-            </span>
-          )}
-          {isOwner ? (
-            <>
-              <Link
-                href={`/concepts/${conceptId}/edit`}
-                className="rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                Edit
-              </Link>
-              <DeleteButton conceptId={conceptId} />
-            </>
-          ) : success || existingInterest ? (
-            <span className="text-sm text-gray-400">Interest sent</span>
-          ) : isLoggedIn ? (
-            <button
-              onClick={() => setModalOpen(true)}
-              className="rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
-            >
-              Let&apos;s build this
-            </button>
-          ) : (
+      <div className="fixed bottom-0 left-56 right-0 h-16 bg-white border-t border-gray-200 flex items-center justify-center px-6 z-10">
+        {error && (
+          <span className="text-xs text-red-500 absolute left-6 hidden sm:block">
+            {decodeURIComponent(error)}
+          </span>
+        )}
+        {isOwner ? (
+          <div className="flex items-center gap-2">
             <Link
-              href="/?error=Sign+in+to+express+interest"
-              className="rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
+              href={`/concepts/${conceptId}/edit`}
+              className="rounded-full border border-gray-300 px-5 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
             >
-              Sign in to express interest
+              Edit
             </Link>
-          )}
-        </div>
+            <DeleteButton conceptId={conceptId} />
+          </div>
+        ) : success || existingInterest ? (
+          <span className="text-sm text-gray-400">Interest sent</span>
+        ) : isLoggedIn ? (
+          <button
+            onClick={() => setModalOpen(true)}
+            className="rounded-full bg-brand px-6 py-2 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
+          >
+            Let&apos;s build this
+          </button>
+        ) : (
+          <Link
+            href="/?error=Sign+in+to+express+interest"
+            className="rounded-full bg-brand px-6 py-2 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
+          >
+            Sign in to express interest
+          </Link>
+        )}
       </div>
 
       {/* Modal */}
