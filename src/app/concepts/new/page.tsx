@@ -94,7 +94,7 @@ export default async function NewConceptPage({
 
           <button
             type="submit"
-            className="mt-2 rounded-full bg-gray-900 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-700"
+            className="mt-2 rounded-full bg-brand py-3 text-sm font-medium text-white transition-colors hover:bg-brand-dark"
           >
             Post concept
           </button>

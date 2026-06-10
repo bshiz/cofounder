@@ -126,7 +126,7 @@ export default async function Home({
                       <Avatar profile={poster} size={20} />
                       <span className="text-xs text-gray-500">{name}</span>
                       <span className="text-gray-200 select-none">·</span>
-                      <span className="inline-block rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+                      <span className="inline-block rounded-full bg-accent px-2.5 py-0.5 text-xs font-medium text-white">
                         {concept.category}
                       </span>
                     </div>
@@ -143,7 +143,7 @@ export default async function Home({
             {user ? (
               <Link
                 href="/concepts/new"
-                className="rounded-full bg-gray-900 px-6 py-2 text-sm font-medium text-white hover:bg-gray-700"
+                className="rounded-full bg-brand px-6 py-2 text-sm font-medium text-white hover:bg-brand-dark"
               >
                 Post the first one
               </Link>

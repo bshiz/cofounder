@@ -29,7 +29,7 @@ export default function SidebarNav() {
             href="/"
             className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
               pathname === '/' && !currentCategory
-                ? 'bg-gray-100 text-gray-900'
+                ? 'bg-brand/10 text-brand font-semibold'
                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
             }`}
           >
@@ -42,7 +42,7 @@ export default function SidebarNav() {
             href="/about"
             className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
               pathname === '/about'
-                ? 'bg-gray-100 text-gray-900'
+                ? 'bg-brand/10 text-brand font-semibold'
                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
             }`}
           >
@@ -61,7 +61,7 @@ export default function SidebarNav() {
             href="/"
             className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
               pathname === '/' && !currentCategory
-                ? 'bg-gray-100 text-gray-900'
+                ? 'bg-brand/10 text-brand font-semibold'
                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
             }`}
           >
@@ -74,7 +74,7 @@ export default function SidebarNav() {
               href={`/?category=${encodeURIComponent(cat)}`}
               className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 currentCategory === cat
-                  ? 'bg-gray-100 text-gray-900'
+                  ? 'bg-brand/10 text-brand font-semibold'
                   : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
               }`}
             >

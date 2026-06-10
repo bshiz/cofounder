@@ -58,8 +58,9 @@ export default function HeaderClient({
 
   return (
     <header className="fixed top-0 left-0 right-0 z-20 h-12 border-b border-gray-200 bg-white flex items-center justify-between px-5">
-      <Link href="/" className="text-base font-bold text-gray-900 tracking-tight">
-        Cofounder
+      <Link href="/" className="flex items-center gap-2">
+        <Image src="/kindred-logo.png" alt="Kindred" width={28} height={28} className="shrink-0" />
+        <span className="text-base font-bold text-gray-900 tracking-tight">Cofounder</span>
       </Link>
       <div className="flex items-center gap-3">
         {user ? (
@@ -67,7 +68,7 @@ export default function HeaderClient({
             {showPostButton && (
               <Link
                 href="/concepts/new"
-                className="rounded-full bg-gray-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+                className="rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
               >
                 Post a Concept
               </Link>

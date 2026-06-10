@@ -94,7 +94,7 @@ export default async function DashboardPage() {
             <p className="text-gray-400 text-lg mb-4">You haven&apos;t posted any concepts yet.</p>
             <Link
               href="/concepts/new"
-              className="rounded-full bg-gray-900 px-6 py-2 text-sm font-medium text-white hover:bg-gray-700"
+              className="rounded-full bg-brand px-6 py-2 text-sm font-medium text-white hover:bg-brand-dark"
             >
               Post your first concept
             </Link>
@@ -130,7 +130,7 @@ export default async function DashboardPage() {
 
                 {/* Category */}
                 <div className="mt-auto pt-3 border-t border-gray-100">
-                  <span className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
+                  <span className="inline-block rounded-full bg-accent px-3 py-1 text-xs font-medium text-white">
                     {concept.category}
                   </span>
                 </div>

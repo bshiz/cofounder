@@ -90,14 +90,14 @@ export default function ConceptBar({
           ) : isLoggedIn ? (
             <button
               onClick={() => setModalOpen(true)}
-              className="rounded-full bg-gray-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+              className="rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
             >
               Express interest
             </button>
           ) : (
             <Link
               href="/?error=Sign+in+to+express+interest"
-              className="rounded-full bg-gray-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+              className="rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
             >
               Sign in to express interest
             </Link>
@@ -134,7 +134,7 @@ export default function ConceptBar({
               <div className="flex items-center gap-3 mt-4">
                 <button
                   type="submit"
-                  className="rounded-full bg-gray-900 px-5 py-2 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+                  className="rounded-full bg-brand px-5 py-2 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
                 >
                   Send
                 </button>

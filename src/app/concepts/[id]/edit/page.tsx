@@ -125,7 +125,7 @@ export default async function EditConceptPage({
           <div className="flex items-center gap-3 mt-2">
             <button
               type="submit"
-              className="rounded-full bg-gray-900 px-6 py-2.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+              className="rounded-full bg-brand px-6 py-2.5 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
             >
               Save changes
             </button>

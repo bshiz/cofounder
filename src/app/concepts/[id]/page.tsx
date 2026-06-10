@@ -103,7 +103,7 @@ export default async function ConceptPage({
             <h1 className="text-2xl font-bold text-gray-900 mb-2 leading-snug">{concept.title}</h1>
             <p className="text-sm text-gray-600 leading-relaxed">{concept.description}</p>
           </div>
-          <span className="shrink-0 inline-block rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600 mt-1">
+          <span className="shrink-0 inline-block rounded-full bg-accent px-3 py-1 text-xs font-medium text-white mt-1">
             {concept.category}
           </span>
         </div>
