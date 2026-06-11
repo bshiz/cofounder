@@ -24,7 +24,7 @@ function Avatar({ profile, size = 28 }: { profile: Profile; size?: number }) {
   const initial = profile?.full_name?.charAt(0).toUpperCase() ?? '?'
   return (
     <span
-      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600 shrink-0"
+      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-[#4a4a4a] shrink-0"
       style={{ width: size, height: size }}
     >
       {initial}
@@ -60,7 +60,7 @@ export default function HeaderClient({
     <header className="fixed top-0 left-0 right-0 z-20 h-16 border-b border-gray-200 bg-white flex items-center justify-between px-6">
       <Link href="/" className="flex items-center gap-2">
         <Image src="/kindred-logo.png" alt="Kindred" width={36} height={36} className="shrink-0" />
-        <span className="text-xl font-bold text-gray-900 tracking-tight">Kindred</span>
+        <span className="text-xl font-bold text-[#1a1a1a] tracking-tight">Kindred</span>
       </Link>
       <div className="flex items-center gap-3">
         {user ? (
@@ -81,7 +81,7 @@ export default function HeaderClient({
           <form action={signInWithGoogle}>
             <button
               type="submit"
-              className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
             >
               <GoogleIcon />
               Sign in

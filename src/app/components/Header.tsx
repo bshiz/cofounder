@@ -21,7 +21,7 @@ function Avatar({ profile, size = 28 }: { profile: Profile; size?: number }) {
   const initial = profile?.full_name?.charAt(0).toUpperCase() ?? '?'
   return (
     <span
-      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600 shrink-0"
+      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-[#4a4a4a] shrink-0"
       style={{ width: size, height: size }}
     >
       {initial}
@@ -64,7 +64,7 @@ export default async function Header({
 
   return (
     <header className="fixed top-0 left-0 right-0 z-20 h-12 border-b border-gray-200 bg-white flex items-center justify-between px-5">
-      <Link href="/" className="text-base font-bold text-gray-900 tracking-tight">
+      <Link href="/" className="text-base font-bold text-[#1a1a1a] tracking-tight">
         Kindred
       </Link>
       <div className="flex items-center gap-3">
@@ -85,7 +85,7 @@ export default async function Header({
               <form action="/auth/signout" method="POST">
                 <button
                   type="submit"
-                  className="text-sm text-gray-400 hover:text-gray-700 transition-colors"
+                  className="text-sm text-[#4a4a4a] hover:text-[#4a4a4a] transition-colors"
                 >
                   Sign out
                 </button>
@@ -96,7 +96,7 @@ export default async function Header({
           <form action={signInWithGoogle}>
             <button
               type="submit"
-              className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
             >
               <GoogleIcon />
               Sign in

@@ -25,7 +25,7 @@ function Avatar({ profile, size = 28 }: { profile: Profile; size?: number }) {
   const initial = profile?.full_name?.charAt(0).toUpperCase() ?? '?'
   return (
     <span
-      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600 shrink-0"
+      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-[#4a4a4a] shrink-0"
       style={{ width: size, height: size }}
     >
       {initial}
@@ -74,14 +74,14 @@ export default function ConceptBar({
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopyLink}
-              className="flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
             >
               <Link2 size={14} />
               {copied ? 'Copied!' : 'Copy link'}
             </button>
             <Link
               href={`/concepts/${conceptId}/edit`}
-              className="flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
             >
               <Pencil size={14} />
               Edit
@@ -89,7 +89,7 @@ export default function ConceptBar({
             <DeleteButton conceptId={conceptId} />
           </div>
         ) : success || existingInterest ? (
-          <span className="text-sm text-gray-400">Interest sent</span>
+          <span className="text-sm text-[#4a4a4a]">Interest sent</span>
         ) : isLoggedIn ? (
           <button
             onClick={() => setModalOpen(true)}
@@ -116,8 +116,8 @@ export default function ConceptBar({
           }}
         >
           <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4 shadow-xl">
-            <h2 className="text-base font-semibold text-gray-900 mb-1">Let&apos;s build this</h2>
-            <p className="text-sm text-gray-500 mb-4">
+            <h2 className="text-base font-semibold text-[#1a1a1a] mb-1">Let&apos;s build this</h2>
+            <p className="text-sm text-[#4a4a4a] mb-4">
               Tell the founder why you&apos;re interested in building this together.
             </p>
             <form action={expressInterest}>
@@ -129,10 +129,10 @@ export default function ConceptBar({
                 maxLength={200}
                 rows={4}
                 placeholder="What draws you to this concept? What would you bring to the team?"
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 resize-none"
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm placeholder-[#4a4a4a] focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 resize-none"
                 required
               />
-              <p className="text-xs text-gray-400 text-right mt-1">{reason.length}/200</p>
+              <p className="text-xs text-[#4a4a4a] text-right mt-1">{reason.length}/200</p>
               <div className="flex items-center justify-end gap-3 mt-4">
                 <button
                   type="submit"
@@ -143,7 +143,7 @@ export default function ConceptBar({
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="rounded-full border border-gray-300 px-5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+                  className="rounded-full border border-gray-300 px-5 py-2 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>

@@ -18,10 +18,10 @@ export default function CopyLinkButton({ path }: { path: string }) {
     <button
       onClick={handleCopy}
       title="Copy link"
-      className="flex items-center gap-1 rounded-full px-2.5 py-1 text-xs text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors shrink-0"
+      className="flex items-center gap-1 rounded-full px-2.5 py-1 text-xs text-[#4a4a4a] hover:text-[#4a4a4a] hover:bg-gray-100 transition-colors shrink-0"
     >
       {copied ? (
-        <span className="text-xs font-medium text-gray-600">Copied!</span>
+        <span className="text-xs font-medium text-[#4a4a4a]">Copied!</span>
       ) : (
         <Link2 size={14} />
       )}

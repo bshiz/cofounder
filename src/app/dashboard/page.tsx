@@ -22,7 +22,7 @@ function Avatar({ profile, size = 22 }: { profile: Profile; size?: number }) {
   const initial = profile?.full_name?.charAt(0).toUpperCase() ?? '?'
   return (
     <span
-      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600 shrink-0"
+      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-[#4a4a4a] shrink-0"
       style={{ width: size, height: size }}
     >
       {initial}
@@ -69,30 +69,30 @@ export default async function DashboardPage() {
                 className="rounded-full object-cover"
               />
             ) : (
-              <span className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-base font-semibold text-gray-600">
+              <span className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-base font-semibold text-[#4a4a4a]">
                 {profile?.full_name?.charAt(0).toUpperCase() ?? '?'}
               </span>
             )}
             <div>
-              <p className="text-base font-semibold text-gray-900">{profile?.full_name ?? 'Anonymous'}</p>
-              <p className="text-sm text-gray-400">{user.email}</p>
+              <p className="text-base font-semibold text-[#1a1a1a]">{profile?.full_name ?? 'Anonymous'}</p>
+              <p className="text-sm text-[#4a4a4a]">{user.email}</p>
             </div>
           </div>
           <form action="/auth/signout" method="POST">
             <button
               type="submit"
-              className="text-sm text-gray-400 hover:text-gray-700 transition-colors"
+              className="text-sm text-[#4a4a4a] hover:text-[#4a4a4a] transition-colors"
             >
               Sign out
             </button>
           </form>
         </div>
 
-        <h1 className="text-2xl font-bold text-gray-900 mb-8">Profile</h1>
+        <h1 className="text-2xl font-bold text-[#1a1a1a] mb-8">Profile</h1>
 
         {typedConcepts.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-32 text-center">
-            <p className="text-gray-400 text-lg mb-4">You haven&apos;t posted any concepts yet.</p>
+            <p className="text-[#4a4a4a] text-lg mb-4">You haven&apos;t posted any concepts yet.</p>
             <Link
               href="/concepts/new"
               className="rounded-full bg-brand px-6 py-2 text-sm font-medium text-white hover:bg-brand-dark"
@@ -111,11 +111,11 @@ export default async function DashboardPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Avatar profile={profile} size={22} />
-                    <span className="text-xs text-gray-500 truncate">{profile?.full_name ?? 'You'}</span>
+                    <span className="text-xs text-[#4a4a4a] truncate">{profile?.full_name ?? 'You'}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     {concept.interests.length > 0 && (
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-[#4a4a4a]">
                         {concept.interests.length} interested
                       </span>
                     )}
@@ -125,10 +125,10 @@ export default async function DashboardPage() {
 
                 {/* Title + description — clickable */}
                 <Link href={`/concepts/${concept.id}`} className="flex flex-col gap-1.5">
-                  <h2 className="text-base font-semibold text-gray-900 group-hover:text-gray-700">
+                  <h2 className="text-base font-semibold text-[#1a1a1a] group-hover:text-[#4a4a4a]">
                     {concept.title}
                   </h2>
-                  <p className="text-sm text-gray-500 line-clamp-3">{concept.description}</p>
+                  <p className="text-sm text-[#4a4a4a] line-clamp-3">{concept.description}</p>
                 </Link>
 
                 {/* Category */}

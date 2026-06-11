@@ -51,7 +51,7 @@ export default function PrototypePreview({
         <span className="w-3 h-3 rounded-full bg-red-400" />
         <span className="w-3 h-3 rounded-full bg-yellow-400" />
         <span className="w-3 h-3 rounded-full bg-green-400" />
-        <span className="ml-3 text-xs text-gray-400 font-mono truncate flex-1">
+        <span className="ml-3 text-xs text-[#4a4a4a] font-mono truncate flex-1">
           {chromeLabel} — Live Preview
         </span>
       </div>
@@ -75,7 +75,7 @@ export default function PrototypePreview({
 
         {state.type === 'url-blocked' && (
           <div className="flex flex-col items-center justify-center h-full gap-4">
-            <p className="text-sm text-gray-400">This prototype can&apos;t be embedded.</p>
+            <p className="text-sm text-[#4a4a4a]">This prototype can&apos;t be embedded.</p>
             <a
               href={state.url}
               target="_blank"
@@ -99,7 +99,7 @@ export default function PrototypePreview({
 
         {state.type === 'none' && (
           <div className="flex items-center justify-center h-full">
-            <p className="text-sm text-gray-400">No preview available.</p>
+            <p className="text-sm text-[#4a4a4a]">No preview available.</p>
           </div>
         )}
       </div>

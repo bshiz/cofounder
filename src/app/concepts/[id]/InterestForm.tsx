@@ -12,7 +12,7 @@ export default function InterestForm({ conceptId }: { conceptId: string }) {
     <form action={expressInterest} className="flex flex-col gap-4">
       <input type="hidden" name="concept_id" value={conceptId} />
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="reason" className="text-sm font-medium text-gray-700">
+        <label htmlFor="reason" className="text-sm font-medium text-[#4a4a4a]">
           I&apos;m interested because…
         </label>
         <textarea
@@ -23,9 +23,9 @@ export default function InterestForm({ conceptId }: { conceptId: string }) {
           rows={3}
           placeholder="Tell the founder why you're excited about this and what you'd bring to the table."
           onChange={(e) => setChars(e.target.value.length)}
-          className="rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 resize-none"
+          className="rounded-xl border border-gray-300 px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#4a4a4a] focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 resize-none"
         />
-        <span className={`text-xs self-end ${chars >= MAX ? 'text-red-500' : 'text-gray-400'}`}>
+        <span className={`text-xs self-end ${chars >= MAX ? 'text-red-500' : 'text-[#4a4a4a]'}`}>
           {chars}/{MAX}
         </span>
       </div>

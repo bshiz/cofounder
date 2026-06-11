@@ -22,7 +22,7 @@ function Avatar({ profile, size = 26 }: { profile: Profile; size?: number }) {
   const initial = profile?.full_name?.charAt(0).toUpperCase() ?? '?'
   return (
     <span
-      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600 shrink-0"
+      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-[#4a4a4a] shrink-0"
       style={{ width: size, height: size }}
     >
       {initial}
@@ -71,26 +71,26 @@ export default async function ConceptPage({
         {/* Founder + category row */}
         <div className="flex items-center gap-2.5 mb-3">
           <Avatar profile={poster} size={28} />
-          <span className="text-sm text-gray-500">{poster?.full_name ?? 'Anonymous'}</span>
+          <span className="text-sm text-[#4a4a4a]">{poster?.full_name ?? 'Anonymous'}</span>
           <span className="inline-block rounded-full bg-accent px-3 py-1 text-xs font-medium text-white">
             {concept.category}
           </span>
         </div>
 
         {/* Title */}
-        <h1 className="text-2xl font-bold text-gray-900 leading-snug mb-4">{concept.title}</h1>
+        <h1 className="text-2xl font-bold text-[#1a1a1a] leading-snug mb-4">{concept.title}</h1>
 
         {/* Description + Looking for: two columns if both present, single column otherwise */}
         {concept.collaborator_description ? (
           <div className="grid grid-cols-2 gap-8">
-            <p className="text-sm text-gray-600 leading-relaxed">{concept.description}</p>
+            <p className="text-sm text-[#4a4a4a] leading-relaxed">{concept.description}</p>
             <div>
-              <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Looking for</h2>
-              <p className="text-sm text-gray-600 leading-relaxed">{concept.collaborator_description}</p>
+              <h2 className="text-xs font-semibold text-[#4a4a4a] uppercase tracking-wider mb-1.5">Looking for</h2>
+              <p className="text-sm text-[#4a4a4a] leading-relaxed">{concept.collaborator_description}</p>
             </div>
           </div>
         ) : (
-          <p className="text-sm text-gray-600 leading-relaxed max-w-2xl">{concept.description}</p>
+          <p className="text-sm text-[#4a4a4a] leading-relaxed max-w-2xl">{concept.description}</p>
         )}
       </div>
 

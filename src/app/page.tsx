@@ -2,24 +2,6 @@ import { createClient, getUser } from '@/lib/supabase/server'
 import Link from 'next/link'
 import Image from 'next/image'
 
-const CATEGORY_COLORS: Record<string, { from: string; to: string }> = {
-  'Developer Tools':     { from: '#6d28d9', to: '#4338ca' },
-  'Consumer Apps':       { from: '#f97316', to: '#e11d48' },
-  'Productivity':        { from: '#2563eb', to: '#0891b2' },
-  'Health & Wellness':   { from: '#059669', to: '#0d9488' },
-  'Finance':             { from: '#0d9488', to: '#065f46' },
-  'Education':           { from: '#d97706', to: '#ea580c' },
-  'Creator Tools':       { from: '#9333ea', to: '#db2777' },
-  'Hardware & Physical': { from: '#475569', to: '#1e293b' },
-  'Social':              { from: '#ec4899', to: '#e11d48' },
-  'Other':               { from: '#6b7280', to: '#374151' },
-}
-
-function getGradientStyle(category: string): React.CSSProperties {
-  const colors = CATEGORY_COLORS[category] ?? { from: '#6b7280', to: '#374151' }
-  return { background: `linear-gradient(135deg, ${colors.from}, ${colors.to})` }
-}
-
 type Profile = { id?: string; full_name: string | null; avatar_url: string | null } | null | undefined
 
 function Avatar({ profile, size = 28 }: { profile: Profile; size?: number }) {
@@ -38,7 +20,7 @@ function Avatar({ profile, size = 28 }: { profile: Profile; size?: number }) {
   const initial = profile?.full_name?.charAt(0).toUpperCase() ?? '?'
   return (
     <span
-      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-600 shrink-0"
+      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-[#4a4a4a] shrink-0"
       style={{ width: size, height: size }}
     >
       {initial}
@@ -93,8 +75,8 @@ export default async function Home({
       )}
       <main className="max-w-2xl mx-auto px-6 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2 leading-tight">Where makers find each other</h1>
-          <p className="text-gray-500">Share what you&apos;re building and find someone who can&apos;t wait to work on it with you.</p>
+          <h1 className="text-4xl font-bold text-[#1a1a1a] mb-2 leading-tight">Where makers find each other</h1>
+          <p className="text-[#4a4a4a]">Share what you&apos;re building and find someone who can&apos;t wait to work on it with you.</p>
         </div>
 
         {concepts && concepts.length > 0 ? (
@@ -109,11 +91,8 @@ export default async function Home({
                   className="group rounded-2xl border border-gray-200 overflow-hidden hover:border-gray-300 hover:shadow-md transition-all"
                 >
                   {/* Card preview */}
-                  <div
-                    className="h-48 relative overflow-hidden"
-                    style={concept.thumbnail_url ? undefined : getGradientStyle(concept.category)}
-                  >
-                    {concept.thumbnail_url && (
+                  {concept.thumbnail_url ? (
+                    <div className="h-48 relative overflow-hidden">
                       <Image
                         src={concept.thumbnail_url}
                         alt={concept.title}
@@ -121,24 +100,33 @@ export default async function Home({
                         sizes="(max-width: 768px) 100vw, 672px"
                         className="object-cover"
                       />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-5">
-                      <h2 className="text-white text-lg font-bold leading-snug line-clamp-2 drop-shadow-sm">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-5">
+                        <h2 className="text-white text-lg font-bold leading-snug line-clamp-2 drop-shadow-sm">
+                          {concept.title}
+                        </h2>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="h-48 bg-[#faf7f4] relative overflow-hidden flex items-center justify-center p-6">
+                      <span className="absolute inset-0 flex items-center justify-center text-[7rem] font-black text-[#ede8e1] leading-none select-none pointer-events-none whitespace-nowrap">
+                        {concept.category}
+                      </span>
+                      <h2 className="relative text-[#1a1a1a] text-lg font-bold leading-snug line-clamp-2 text-center z-10">
                         {concept.title}
                       </h2>
                     </div>
-                  </div>
+                  )}
 
                   {/* Content */}
                   <div className="px-5 py-4">
-                    <p className="text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed">
+                    <p className="text-sm text-[#4a4a4a] mb-3 line-clamp-2 leading-relaxed">
                       {concept.description}
                     </p>
                     <div className="flex items-center gap-2">
                       <Avatar profile={poster} size={20} />
-                      <span className="text-xs text-gray-500">{name}</span>
-                      <span className="text-gray-200 select-none">·</span>
+                      <span className="text-xs text-[#4a4a4a]">{name}</span>
+                      <span className="text-[#d0c8c0] select-none">·</span>
                       <span className="inline-block rounded-full bg-accent px-2.5 py-0.5 text-xs font-medium text-white">
                         {concept.category}
                       </span>
@@ -150,7 +138,7 @@ export default async function Home({
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-32 text-center">
-            <p className="text-gray-400 text-lg mb-4">
+            <p className="text-[#4a4a4a] text-lg mb-4">
               {category ? `No concepts in "${category}" yet.` : 'No concepts posted yet.'}
             </p>
             {user ? (
@@ -161,7 +149,7 @@ export default async function Home({
                 Post the first one
               </Link>
             ) : (
-              <p className="text-sm text-gray-400">Sign in to post the first concept.</p>
+              <p className="text-sm text-[#4a4a4a]">Sign in to post the first concept.</p>
             )}
           </div>
         )}

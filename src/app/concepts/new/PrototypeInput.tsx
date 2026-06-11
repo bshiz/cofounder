@@ -8,8 +8,8 @@ export default function PrototypeInput() {
   return (
     <div className="flex flex-col gap-3">
       <div>
-        <p className="text-sm font-medium text-gray-700 mb-1">Your prototype</p>
-        <p className="text-xs text-gray-400">
+        <p className="text-sm font-medium text-[#4a4a4a] mb-1">Your prototype</p>
+        <p className="text-xs text-[#4a4a4a]">
           Share your Loveable, Vercel, or any live URL — or upload a self-contained HTML file.
         </p>
       </div>
@@ -21,7 +21,7 @@ export default function PrototypeInput() {
           className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
             mode === 'url'
               ? 'bg-gray-900 text-white'
-              : 'border border-gray-200 text-gray-600 hover:border-gray-400 hover:text-gray-900'
+              : 'border border-gray-200 text-[#4a4a4a] hover:border-gray-400 hover:text-[#1a1a1a]'
           }`}
         >
           Paste a URL
@@ -32,7 +32,7 @@ export default function PrototypeInput() {
           className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
             mode === 'html'
               ? 'bg-gray-900 text-white'
-              : 'border border-gray-200 text-gray-600 hover:border-gray-400 hover:text-gray-900'
+              : 'border border-gray-200 text-[#4a4a4a] hover:border-gray-400 hover:text-[#1a1a1a]'
           }`}
         >
           Upload an HTML file
@@ -44,14 +44,14 @@ export default function PrototypeInput() {
           name="prototype_url"
           type="url"
           placeholder="https://your-prototype.com"
-          className="rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+          className="rounded-xl border border-gray-300 px-4 py-3 text-sm text-[#1a1a1a] placeholder-[#4a4a4a] focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
         />
       ) : (
         <input
           name="html_file"
           type="file"
           accept=".html,text/html"
-          className="rounded-xl border border-gray-300 px-4 py-3 text-sm text-gray-900 file:mr-4 file:rounded-full file:border-0 file:bg-gray-100 file:px-4 file:py-1.5 file:text-xs file:font-medium file:text-gray-700 hover:file:bg-gray-200 focus:outline-none"
+          className="rounded-xl border border-gray-300 px-4 py-3 text-sm text-[#1a1a1a] file:mr-4 file:rounded-full file:border-0 file:bg-gray-100 file:px-4 file:py-1.5 file:text-xs file:font-medium file:text-[#4a4a4a] hover:file:bg-gray-200 focus:outline-none"
         />
       )}
     </div>
