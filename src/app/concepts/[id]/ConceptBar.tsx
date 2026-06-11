@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Link2, Pencil } from 'lucide-react'
 import { expressInterest } from '@/app/actions'
 import DeleteButton from './DeleteButton'
 
@@ -53,6 +54,13 @@ export default function ConceptBar({
 }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [reason, setReason] = useState('')
+  const [copied, setCopied] = useState(false)
+
+  async function handleCopyLink() {
+    await navigator.clipboard.writeText(window.location.origin + `/concepts/${conceptId}`)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
     <>
@@ -64,10 +72,18 @@ export default function ConceptBar({
         )}
         {isOwner ? (
           <div className="flex items-center gap-2">
+            <button
+              onClick={handleCopyLink}
+              className="flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              <Link2 size={14} />
+              {copied ? 'Copied!' : 'Copy link'}
+            </button>
             <Link
               href={`/concepts/${conceptId}/edit`}
-              className="rounded-full border border-gray-300 px-5 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
             >
+              <Pencil size={14} />
               Edit
             </Link>
             <DeleteButton conceptId={conceptId} />

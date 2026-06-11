@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
+import { Trash2 } from 'lucide-react'
 import { deleteConcept } from '@/app/actions'
 
 export default function DeleteButton({ conceptId }: { conceptId: string }) {
@@ -18,8 +19,9 @@ export default function DeleteButton({ conceptId }: { conceptId: string }) {
       <button
         type="button"
         onClick={handleClick}
-        className="rounded-full border border-red-200 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+        className="flex items-center gap-1.5 rounded-full border border-red-200 px-4 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
       >
+        <Trash2 size={14} />
         Delete
       </button>
     </form>

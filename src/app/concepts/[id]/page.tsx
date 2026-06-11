@@ -48,32 +48,11 @@ export default async function ConceptPage({
 
   const isOwner = user?.id === concept.user_id
 
-  const [posterResult, interestsResult] = await Promise.all([
-    supabase.from('profiles').select('full_name, avatar_url').eq('id', concept.user_id).single(),
-    isOwner
-      ? supabase
-          .from('interests')
-          .select('id, user_id, reason, created_at')
-          .eq('concept_id', id)
-          .order('created_at', { ascending: false })
-      : Promise.resolve({ data: null }),
-  ])
-
-  const poster = posterResult.data
-  const interests = interestsResult.data ?? []
-
-  type InterestProfile = { id: string; full_name: string | null; email: string | null; avatar_url: string | null }
-  let interestProfileMap: Record<string, InterestProfile> = {}
-  if (isOwner && interests.length > 0) {
-    const userIds = interests.map((i: { user_id: string }) => i.user_id)
-    const { data: profiles } = await supabase
-      .from('profiles')
-      .select('id, full_name, email, avatar_url')
-      .in('id', userIds)
-    if (profiles) {
-      interestProfileMap = Object.fromEntries(profiles.map((p) => [p.id, p]))
-    }
-  }
+  const { data: poster } = await supabase
+    .from('profiles')
+    .select('full_name, avatar_url')
+    .eq('id', concept.user_id)
+    .single()
 
   let existingInterest: { reason: string } | null = null
   if (user && !isOwner) {
@@ -129,40 +108,6 @@ export default async function ConceptPage({
           title={concept.title}
         />
       </div>
-
-      {/* Owner: interests list */}
-      {isOwner && (
-        <div className="max-w-2xl mx-auto px-6 py-8">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">
-            Interested{' '}
-            {interests.length > 0 && (
-              <span className="text-gray-400 font-normal">({interests.length})</span>
-            )}
-          </h2>
-          {interests.length === 0 ? (
-            <p className="text-sm text-gray-400">No one has expressed interest yet.</p>
-          ) : (
-            <ul className="flex flex-col gap-3">
-              {interests.map((interest: { id: string; user_id: string; reason: string }) => {
-                const p = interestProfileMap[interest.user_id]
-                const name = p?.full_name ?? p?.email ?? 'Anonymous'
-                return (
-                  <li key={interest.id} className="rounded-xl border border-gray-200 px-4 py-4">
-                    <div className="flex items-center gap-2.5 mb-2">
-                      <Avatar profile={p ?? null} size={26} />
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">{name}</p>
-                        {p?.email && <p className="text-xs text-gray-400">{p.email}</p>}
-                      </div>
-                    </div>
-                    <p className="text-sm text-gray-600 italic">&ldquo;{interest.reason}&rdquo;</p>
-                  </li>
-                )
-              })}
-            </ul>
-          )}
-        </div>
-      )}
 
       <ConceptBar
         poster={poster}
