@@ -2,6 +2,7 @@ import { createClient, getUser } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import CopyLinkButton from '@/app/components/CopyLinkButton'
 
 type Profile = { full_name: string | null; avatar_url: string | null } | null | undefined
 
@@ -102,9 +103,8 @@ export default async function DashboardPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {typedConcepts.map((concept) => (
-              <Link
+              <div
                 key={concept.id}
-                href={`/concepts/${concept.id}`}
                 className="group rounded-2xl border border-gray-200 p-5 hover:border-gray-400 hover:shadow-md transition-all flex flex-col gap-3"
               >
                 {/* Poster row */}
@@ -113,20 +113,23 @@ export default async function DashboardPage() {
                     <Avatar profile={profile} size={22} />
                     <span className="text-xs text-gray-500 truncate">{profile?.full_name ?? 'You'}</span>
                   </div>
-                  {concept.interests.length > 0 && (
-                    <span className="text-xs text-gray-400">
-                      {concept.interests.length} interested
-                    </span>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {concept.interests.length > 0 && (
+                      <span className="text-xs text-gray-400">
+                        {concept.interests.length} interested
+                      </span>
+                    )}
+                    <CopyLinkButton path={`/concepts/${concept.id}`} />
+                  </div>
                 </div>
 
-                {/* Title + description */}
-                <div>
-                  <h2 className="text-base font-semibold text-gray-900 mb-1.5 group-hover:text-gray-700">
+                {/* Title + description — clickable */}
+                <Link href={`/concepts/${concept.id}`} className="flex flex-col gap-1.5">
+                  <h2 className="text-base font-semibold text-gray-900 group-hover:text-gray-700">
                     {concept.title}
                   </h2>
                   <p className="text-sm text-gray-500 line-clamp-3">{concept.description}</p>
-                </div>
+                </Link>
 
                 {/* Category */}
                 <div className="mt-auto pt-3 border-t border-gray-100">
@@ -134,7 +137,7 @@ export default async function DashboardPage() {
                     {concept.category}
                   </span>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         )}

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import ConceptBar from './ConceptBar'
 import PrototypePreview from './PrototypePreview'
+import CopyLinkButton from '@/app/components/CopyLinkButton'
 
 type Profile = { full_name: string | null; avatar_url: string | null } | null
 
@@ -100,8 +101,11 @@ export default async function ConceptPage({
           </span>
         </div>
 
-        {/* Title */}
-        <h1 className="text-2xl font-bold text-gray-900 leading-snug mb-4">{concept.title}</h1>
+        {/* Title + copy link */}
+        <div className="flex items-start gap-2 mb-4">
+          <h1 className="text-2xl font-bold text-gray-900 leading-snug flex-1">{concept.title}</h1>
+          <CopyLinkButton path={`/concepts/${id}`} />
+        </div>
 
         {/* Description + Looking for: two columns if both present, single column otherwise */}
         {concept.collaborator_description ? (
