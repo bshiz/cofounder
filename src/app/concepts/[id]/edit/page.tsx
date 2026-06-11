@@ -11,6 +11,7 @@ const CATEGORIES = [
   'Finance',
   'Education',
   'Creator Tools',
+  'Music',
   'Hardware & Physical',
   'Social',
   'Other',

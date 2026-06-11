@@ -12,6 +12,7 @@ const CATEGORIES = [
   'Finance',
   'Education',
   'Creator Tools',
+  'Music',
   'Hardware & Physical',
   'Social',
   'Other',
@@ -51,6 +52,8 @@ export default function SidebarNav() {
           </Link>
         </li>
       </ul>
+
+      <div className="border-t border-gray-200 my-3" />
 
       <p className="px-3 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
         Browse
