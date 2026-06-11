@@ -70,7 +70,7 @@ export default function HeaderClient({
                 href="/concepts/new"
                 className="rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
               >
-                Share your concept
+                Post a concept
               </Link>
             )}
             <Link href="/dashboard">

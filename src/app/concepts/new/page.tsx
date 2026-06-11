@@ -32,7 +32,7 @@ export default async function NewConceptPage({
   return (
     <div className="min-h-screen bg-white">
       <main className="max-w-2xl mx-auto px-6 py-12">
-        <h1 className="text-2xl font-bold text-gray-900 mb-8">Share your concept</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-8">Post a concept</h1>
 
         {error && (
           <div className="mb-6 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
