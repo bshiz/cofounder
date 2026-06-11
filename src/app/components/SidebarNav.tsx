@@ -30,7 +30,7 @@ export default function SidebarNav() {
             className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
               pathname === '/' && !currentCategory
                 ? 'bg-brand/10 text-brand font-semibold'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                : 'text-gray-600 hover:bg-[#fdf0eb] hover:text-brand'
             }`}
           >
             <HomeIcon size={14} className="shrink-0" />
@@ -43,7 +43,7 @@ export default function SidebarNav() {
             className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
               pathname === '/about'
                 ? 'bg-brand/10 text-brand font-semibold'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                : 'text-gray-600 hover:bg-[#fdf0eb] hover:text-brand'
             }`}
           >
             <Info size={14} className="shrink-0" />
@@ -62,7 +62,7 @@ export default function SidebarNav() {
             className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
               pathname === '/' && !currentCategory
                 ? 'bg-brand/10 text-brand font-semibold'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                : 'text-gray-600 hover:bg-[#fdf0eb] hover:text-brand'
             }`}
           >
             All
@@ -75,7 +75,7 @@ export default function SidebarNav() {
               className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 currentCategory === cat
                   ? 'bg-brand/10 text-brand font-semibold'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  : 'text-gray-600 hover:bg-[#fdf0eb] hover:text-brand'
               }`}
             >
               {cat}
