@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import ConceptBar from './ConceptBar'
 import PrototypePreview from './PrototypePreview'
-import CopyLinkButton from '@/app/components/CopyLinkButton'
 
 type Profile = { full_name: string | null; avatar_url: string | null } | null
 
@@ -70,21 +69,16 @@ export default async function ConceptPage({
       {/* Top section: concept info above the fold */}
       <div className="px-8 py-6">
         {/* Founder + category row */}
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2.5">
-            <Avatar profile={poster} size={28} />
-            <span className="text-sm text-gray-500">{poster?.full_name ?? 'Anonymous'}</span>
-          </div>
-          <span className="shrink-0 inline-block rounded-full bg-accent px-3 py-1 text-xs font-medium text-white">
+        <div className="flex items-center gap-2.5 mb-3">
+          <Avatar profile={poster} size={28} />
+          <span className="text-sm text-gray-500">{poster?.full_name ?? 'Anonymous'}</span>
+          <span className="inline-block rounded-full bg-accent px-3 py-1 text-xs font-medium text-white">
             {concept.category}
           </span>
         </div>
 
-        {/* Title + copy link */}
-        <div className="flex items-start gap-2 mb-4">
-          <h1 className="text-2xl font-bold text-gray-900 leading-snug flex-1">{concept.title}</h1>
-          <CopyLinkButton path={`/concepts/${id}`} />
-        </div>
+        {/* Title */}
+        <h1 className="text-2xl font-bold text-gray-900 leading-snug mb-4">{concept.title}</h1>
 
         {/* Description + Looking for: two columns if both present, single column otherwise */}
         {concept.collaborator_description ? (
