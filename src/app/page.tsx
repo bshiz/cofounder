@@ -64,7 +64,11 @@ export default async function Home({
     query = query.eq('category', category)
   }
 
-  const { data: concepts } = await query
+  const { data: concepts, error: conceptsError } = await query
+
+  if (conceptsError) {
+    console.error('[feed] concepts query error:', conceptsError)
+  }
 
   const posterIds = [...new Set((concepts ?? []).map((c) => c.user_id))]
 
