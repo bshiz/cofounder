@@ -1,60 +1,40 @@
 'use client'
 
-import { useState } from 'react'
-import Image from 'next/image'
+import { useState, useEffect, useActionState } from 'react'
 import Link from 'next/link'
-import { Link2, Pencil } from 'lucide-react'
+import { Link2, Pencil, CheckCircle } from 'lucide-react'
 import { expressInterest } from '@/app/actions'
 import DeleteButton from './DeleteButton'
 
 type Profile = { full_name: string | null; avatar_url: string | null } | null
 
-function Avatar({ profile, size = 28 }: { profile: Profile; size?: number }) {
-  if (profile?.avatar_url) {
-    return (
-      <Image
-        src={profile.avatar_url}
-        alt={profile.full_name ?? 'Avatar'}
-        width={size}
-        height={size}
-        className="rounded-full object-cover shrink-0"
-        style={{ width: size, height: size }}
-      />
-    )
-  }
-  const initial = profile?.full_name?.charAt(0).toUpperCase() ?? '?'
-  return (
-    <span
-      className="rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-[#4a4a4a] shrink-0"
-      style={{ width: size, height: size }}
-    >
-      {initial}
-    </span>
-  )
-}
-
 export default function ConceptBar({
   poster,
   conceptId,
-  conceptTitle,
   isOwner,
   isLoggedIn,
   existingInterest,
-  success,
-  error,
 }: {
   poster: Profile
   conceptId: string
-  conceptTitle: string
   isOwner: boolean
   isLoggedIn: boolean
-  existingInterest: { reason: string } | null
-  success?: boolean
-  error?: string
+  existingInterest: boolean
 }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [reason, setReason] = useState('')
   const [copied, setCopied] = useState(false)
+  const [state, formAction, pending] = useActionState(expressInterest, null)
+
+  useEffect(() => {
+    if (state?.success) {
+      setModalOpen(false)
+      setReason('')
+    }
+  }, [state?.success])
+
+  const alreadySent = existingInterest || !!state?.success
+  const founderName = poster?.full_name ?? 'the founder'
 
   async function handleCopyLink() {
     await navigator.clipboard.writeText(window.location.origin + `/concepts/${conceptId}`)
@@ -65,11 +45,6 @@ export default function ConceptBar({
   return (
     <>
       <div className="fixed bottom-0 left-56 right-0 h-16 bg-white border-t border-gray-200 flex items-center justify-end px-6 z-10">
-        {error && (
-          <span className="text-xs text-red-500 absolute left-6 hidden sm:block">
-            {decodeURIComponent(error)}
-          </span>
-        )}
         {isOwner ? (
           <div className="flex items-center gap-2">
             <button
@@ -88,8 +63,13 @@ export default function ConceptBar({
             </Link>
             <DeleteButton conceptId={conceptId} />
           </div>
-        ) : success || existingInterest ? (
-          <span className="text-sm text-[#4a4a4a]">Interest sent</span>
+        ) : alreadySent ? (
+          <div className="flex items-center gap-2 text-sm text-[#4a4a4a]">
+            <CheckCircle size={15} className="text-[#2D6A4F] shrink-0" />
+            <span>
+              Interest sent — if {founderName} wants to connect, they&apos;ll reach out to you directly
+            </span>
+          </div>
         ) : isLoggedIn ? (
           <button
             onClick={() => setModalOpen(true)}
@@ -120,7 +100,7 @@ export default function ConceptBar({
             <p className="text-sm text-[#4a4a4a] mb-4">
               Tell the founder why you&apos;re interested in building this together.
             </p>
-            <form action={expressInterest}>
+            <form action={formAction}>
               <input type="hidden" name="concept_id" value={conceptId} />
               <textarea
                 name="reason"
@@ -133,12 +113,16 @@ export default function ConceptBar({
                 required
               />
               <p className="text-xs text-[#4a4a4a] text-right mt-1">{reason.length}/200</p>
+              {state?.error && (
+                <p className="text-xs text-red-500 mt-2">{state.error}</p>
+              )}
               <div className="flex items-center justify-end gap-3 mt-4">
                 <button
                   type="submit"
-                  className="rounded-full bg-[#1a1a1a] px-5 py-2 text-sm font-medium text-white hover:bg-[#333] transition-colors"
+                  disabled={pending}
+                  className="rounded-full bg-[#1a1a1a] px-5 py-2 text-sm font-medium text-white hover:bg-[#333] transition-colors disabled:opacity-50"
                 >
-                  Send
+                  {pending ? 'Sending…' : 'Send'}
                 </button>
                 <button
                   type="button"

@@ -32,13 +32,10 @@ function Avatar({ profile, size = 26 }: { profile: Profile; size?: number }) {
 
 export default async function ConceptPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ id: string }>
-  searchParams: Promise<{ error?: string; success?: string }>
 }) {
   const { id } = await params
-  const { error, success } = await searchParams
   const [supabase, user] = await Promise.all([createClient(), getUser()])
 
   const { data: concept } = await supabase.from('concepts').select('*').eq('id', id).single()
@@ -53,15 +50,15 @@ export default async function ConceptPage({
     .eq('id', concept.user_id)
     .single()
 
-  let existingInterest: { reason: string } | null = null
+  let existingInterest = false
   if (user && !isOwner) {
     const { data } = await supabase
       .from('interests')
-      .select('reason')
+      .select('id')
       .eq('concept_id', id)
       .eq('user_id', user.id)
       .maybeSingle()
-    existingInterest = data
+    existingInterest = !!data
   }
 
   return (
@@ -106,12 +103,9 @@ export default async function ConceptPage({
       <ConceptBar
         poster={poster}
         conceptId={id}
-        conceptTitle={concept.title}
         isOwner={isOwner}
         isLoggedIn={!!user}
         existingInterest={existingInterest}
-        success={!!success}
-        error={error}
       />
     </div>
   )

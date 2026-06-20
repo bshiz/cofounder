@@ -92,21 +92,24 @@ export async function createConcept(formData: FormData) {
   redirect(`/concepts/${concept.id}`)
 }
 
-export async function expressInterest(formData: FormData) {
+export async function expressInterest(
+  _prevState: { success?: boolean; error?: string } | null,
+  formData: FormData
+): Promise<{ success?: boolean; error?: string }> {
   const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/?error=Sign+in+to+express+interest')
+    return { error: 'Sign in to express interest' }
   }
 
   const conceptId = formData.get('concept_id') as string
   const reason = (formData.get('reason') as string).trim()
 
   if (!reason) {
-    redirect(`/concepts/${conceptId}?error=Please+enter+a+reason`)
+    return { error: 'Please enter a reason' }
   }
 
   // Upsert the interested user's profile so the dashboard can display their name/avatar
@@ -122,10 +125,10 @@ export async function expressInterest(formData: FormData) {
     .insert({ concept_id: conceptId, user_id: user.id, reason })
 
   if (insertError) {
-    redirect(`/concepts/${conceptId}?error=${encodeURIComponent(insertError.message)}`)
+    return { error: insertError.message }
   }
 
-  // Email the concept owner — requires SUPABASE_SERVICE_ROLE_KEY + RESEND_API_KEY
+  // Email the concept owner — requires SUPABASE_SERVICE_ROLE_KEY + RESEND_API_KEY + FROM_EMAIL
   try {
     const admin = createAdminClient()
 
@@ -156,7 +159,7 @@ export async function expressInterest(formData: FormData) {
               <p>Hi,</p>
               <p><strong>${interestedName}</strong> expressed interest in building <strong>${concept.title}</strong> with you.</p>
               <p><em>&ldquo;${reason}&rdquo;</em></p>
-              <p><a href="${appUrl}/concepts/${conceptId}">View the concept</a> or <a href="${appUrl}/dashboard">go to your dashboard</a> to see everyone who&apos;s interested.</p>
+              <p><a href="${appUrl}/concepts/${conceptId}">View the concept</a> or <a href="${appUrl}/dashboard">go to your dashboard</a> to see everyone who's interested.</p>
             `,
           }),
         })
@@ -166,7 +169,7 @@ export async function expressInterest(formData: FormData) {
     // Email is best-effort — don't fail the request if it errors
   }
 
-  redirect(`/concepts/${conceptId}?success=1`)
+  return { success: true }
 }
 
 export async function updateConcept(formData: FormData) {
