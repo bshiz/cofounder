@@ -16,6 +16,9 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: 'Kindred',
   description: 'Where makers find each other',
+  icons: {
+    icon: '/kindred-logo.png',
+  },
 }
 
 export default async function RootLayout({
