@@ -17,7 +17,10 @@ export const metadata: Metadata = {
   title: 'Kindred',
   description: 'Where makers find each other',
   icons: {
-    icon: '/kindred-logo.png',
+    icon: [
+      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.png', sizes: '16x16', type: 'image/png' },
+    ],
   },
 }
 
