@@ -39,7 +39,7 @@ export default async function Home({
 
   let query = supabase
     .from('concepts')
-    .select('id, title, description, category, created_at, user_id, thumbnail_url')
+    .select('id, title, description, category, created_at, user_id, thumbnail_url, interests(count)')
     .order('created_at', { ascending: false })
 
   if (category) {
@@ -84,6 +84,7 @@ export default async function Home({
             {concepts.map((concept) => {
               const poster = profileMap[concept.user_id]
               const name = poster?.full_name ?? 'Anonymous'
+              const interestCount = (concept.interests as Array<{ count: number }>)?.[0]?.count ?? 0
               return (
                 <Link
                   key={concept.id}
@@ -138,6 +139,12 @@ export default async function Home({
                       <span className="inline-block rounded-full bg-accent px-2.5 py-0.5 text-xs font-medium text-white">
                         {concept.category}
                       </span>
+                      {interestCount > 0 && (
+                        <>
+                          <span className="text-[#d0c8c0] select-none">·</span>
+                          <span className="text-xs text-[#4a4a4a]">{interestCount} interested</span>
+                        </>
+                      )}
                     </div>
                   </div>
                 </Link>

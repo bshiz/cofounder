@@ -44,11 +44,10 @@ export default async function ConceptPage({
 
   const isOwner = user?.id === concept.user_id
 
-  const { data: poster } = await supabase
-    .from('profiles')
-    .select('full_name, avatar_url')
-    .eq('id', concept.user_id)
-    .single()
+  const [{ data: poster }, { count: interestCount }] = await Promise.all([
+    supabase.from('profiles').select('full_name, avatar_url').eq('id', concept.user_id).single(),
+    supabase.from('interests').select('*', { count: 'exact', head: true }).eq('concept_id', id),
+  ])
 
   let existingInterest = false
   if (user && !isOwner) {
@@ -106,6 +105,7 @@ export default async function ConceptPage({
         isOwner={isOwner}
         isLoggedIn={!!user}
         existingInterest={existingInterest}
+        interestCount={interestCount ?? 0}
       />
     </div>
   )
