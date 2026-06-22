@@ -56,7 +56,7 @@ export default function SidebarNav() {
       <div className="border-t border-gray-200 my-3" />
 
       <p className="px-3 mb-2 text-xs font-semibold text-[#4a4a4a] uppercase tracking-wider">
-        Browse
+        Categories
       </p>
       <ul className="flex flex-col gap-0.5">
         <li>
