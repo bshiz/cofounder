@@ -2,6 +2,20 @@ import { createClient, getUser } from '@/lib/supabase/server'
 import Link from 'next/link'
 import Image from 'next/image'
 
+function Footer() {
+  return (
+    <footer className="mt-16 pb-8 text-center">
+      <p style={{ fontSize: '13px', color: '#4a4a4a' }}>
+        © 2026 Kindred{' '}
+        <span style={{ color: '#d0c8c0' }}>·</span>{' '}
+        <Link href="/legal/privacy" className="hover:underline" style={{ color: '#4a4a4a' }}>Privacy</Link>{' '}
+        <span style={{ color: '#d0c8c0' }}>·</span>{' '}
+        <Link href="/legal/terms" className="hover:underline" style={{ color: '#4a4a4a' }}>Terms</Link>
+      </p>
+    </footer>
+  )
+}
+
 type Profile = { id?: string; full_name: string | null; avatar_url: string | null } | null | undefined
 
 function Avatar({ profile, size = 28 }: { profile: Profile; size?: number }) {
@@ -168,6 +182,7 @@ export default async function Home({
             )}
           </div>
         )}
+        <Footer />
       </main>
     </>
   )
