@@ -3,7 +3,6 @@
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { signInWithGoogle } from '@/app/actions'
 
 type User = { id: string; email: string | null } | null
 type Profile = { full_name: string | null; avatar_url: string | null } | null
@@ -78,15 +77,13 @@ export default function HeaderClient({
             </Link>
           </>
         ) : (
-          <form action={signInWithGoogle}>
-            <button
-              type="submit"
-              className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
-            >
-              <GoogleIcon />
-              Sign in
-            </button>
-          </form>
+          <Link
+            href="/sign-in"
+            className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
+          >
+            <GoogleIcon />
+            Sign in
+          </Link>
         )}
       </div>
     </header>
