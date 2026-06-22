@@ -198,17 +198,12 @@ export async function expressInterest(
                 </tr>
               </table>
 
-              <!-- Contact -->
-              <p style="margin:0 0 28px 0;font-size:15px;color:#4a4a4a;line-height:1.6;font-family:Arial,sans-serif;">
-                If you want to connect, reach out directly at <a href="mailto:${user.email}" style="color:#C1440E;text-decoration:none;font-weight:600;">${user.email}</a>.
-              </p>
-
               <!-- CTA Button -->
               <table cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="background-color:#C1440E;border-radius:8px;">
-                    <a href="${appUrl}/concepts/${conceptId}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;font-family:Arial,sans-serif;">
-                      View your concept →
+                    <a href="mailto:${user.email}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;font-family:Arial,sans-serif;">
+                      Reply to ${interestedName} →
                     </a>
                   </td>
                 </tr>
