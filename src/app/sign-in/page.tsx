@@ -17,13 +17,13 @@ export default function SignInPage() {
     <div className="flex items-center justify-center min-h-[calc(100vh-4rem)]">
       <div className="flex flex-col items-center text-center px-6">
         <h1 className="text-4xl font-bold text-[#1a1a1a] mb-4 leading-tight">
-          Join the builders.
+          Where makers find each other.
         </h1>
         <p
           className="mb-8 leading-relaxed"
           style={{ fontSize: '16px', color: '#4a4a4a', maxWidth: '380px' }}
         >
-          Post your concept, find someone who gets it, and start building together.
+          Share what you&apos;re building and find someone who can&apos;t wait to work on it with you.
         </p>
         <form action={signInWithGoogle}>
           <button
