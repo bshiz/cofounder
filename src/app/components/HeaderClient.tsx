@@ -78,23 +78,15 @@ export default function HeaderClient({
             </Link>
           </>
         ) : (
-          <div className="flex flex-col items-end gap-1">
-            <form action={signInWithGoogle}>
-              <button
-                type="submit"
-                className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
-              >
-                <GoogleIcon />
-                Sign in
-              </button>
-            </form>
-            <p style={{ fontSize: '11px', color: '#4a4a4a', whiteSpace: 'nowrap' }}>
-              By continuing, you agree to our{' '}
-              <Link href="/legal/terms" className="hover:underline" style={{ color: '#4a4a4a' }}>Terms</Link>
-              {' '}and{' '}
-              <Link href="/legal/privacy" className="hover:underline" style={{ color: '#4a4a4a' }}>Privacy Policy</Link>.
-            </p>
-          </div>
+          <form action={signInWithGoogle}>
+            <button
+              type="submit"
+              className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
+            >
+              <GoogleIcon />
+              Sign in
+            </button>
+          </form>
         )}
       </div>
     </header>

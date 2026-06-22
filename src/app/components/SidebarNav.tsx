@@ -23,7 +23,7 @@ export default function SidebarNav() {
   const searchParams = useSearchParams()
   const currentCategory = searchParams.get('category') ?? undefined
   return (
-    <nav className="px-3 py-4">
+    <nav className="px-3 py-4 flex flex-col h-full">
       <ul className="flex flex-col gap-0.5 mb-4">
         <li>
           <Link
@@ -86,6 +86,14 @@ export default function SidebarNav() {
           </li>
         ))}
       </ul>
+
+      <div className="mt-auto pt-3 border-t border-gray-200">
+        <p style={{ fontSize: '12px', color: '#9a9a9a' }} className="px-3 pb-2">
+          <Link href="/legal/privacy" className="hover:underline" style={{ color: '#9a9a9a' }}>Privacy</Link>
+          {' · '}
+          <Link href="/legal/terms" className="hover:underline" style={{ color: '#9a9a9a' }}>Terms</Link>
+        </p>
+      </div>
     </nav>
   )
 }
