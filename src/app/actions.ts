@@ -155,12 +155,85 @@ export async function expressInterest(
             from: process.env.FROM_EMAIL,
             to: ownerEmail,
             subject: `${interestedName} wants to build "${concept.title}" with you`,
-            html: `
-              <p>Hi,</p>
-              <p><strong>${interestedName}</strong> expressed interest in building <strong>${concept.title}</strong> with you.</p>
-              <p><em>&ldquo;${reason}&rdquo;</em></p>
-              <p><a href="${appUrl}/concepts/${conceptId}">View the concept</a> or <a href="${appUrl}/dashboard">go to your dashboard</a> to see everyone who's interested.</p>
-            `,
+            html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Someone wants to build with you</title>
+</head>
+<body style="margin:0;padding:0;background-color:#faf7f4;font-family:Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#faf7f4;padding:40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
+
+          <!-- Header -->
+          <tr>
+            <td align="center" style="padding-bottom:32px;">
+              <img src="https://findkindred.co/kindred-logo.png" alt="Kindred" width="40" height="40" style="display:block;margin:0 auto 8px;" />
+              <span style="font-family:Arial,sans-serif;font-size:18px;font-weight:700;color:#C1440E;letter-spacing:-0.5px;">Kindred</span>
+            </td>
+          </tr>
+
+          <!-- Card -->
+          <tr>
+            <td style="background-color:#ffffff;border-radius:12px;padding:40px;border:1px solid #e8e0d8;">
+
+              <!-- Headline -->
+              <p style="margin:0 0 8px 0;font-size:22px;font-weight:700;color:#1a1a1a;line-height:1.3;font-family:Arial,sans-serif;">
+                Someone wants to build with you 🔥
+              </p>
+              <p style="margin:0 0 28px 0;font-size:15px;color:#4a4a4a;line-height:1.5;font-family:Arial,sans-serif;">
+                <strong style="color:#1a1a1a;">${interestedName}</strong> expressed interest in your concept <strong style="color:#1a1a1a;">"${concept.title}"</strong>
+              </p>
+
+              <!-- Reason block -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
+                <tr>
+                  <td style="background-color:#faf7f4;border-left:3px solid #C1440E;border-radius:0 8px 8px 0;padding:16px 20px;">
+                    <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;color:#C1440E;letter-spacing:0.8px;text-transform:uppercase;font-family:Arial,sans-serif;">Their reason</p>
+                    <p style="margin:0;font-size:15px;color:#1a1a1a;line-height:1.6;font-style:italic;font-family:Arial,sans-serif;">"${reason}"</p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Contact -->
+              <p style="margin:0 0 28px 0;font-size:15px;color:#4a4a4a;line-height:1.6;font-family:Arial,sans-serif;">
+                If you want to connect, reach out directly at <a href="mailto:${user.email}" style="color:#C1440E;text-decoration:none;font-weight:600;">${user.email}</a>.
+              </p>
+
+              <!-- CTA Button -->
+              <table cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background-color:#C1440E;border-radius:8px;">
+                    <a href="${appUrl}/concepts/${conceptId}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;font-family:Arial,sans-serif;">
+                      View your concept →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding-top:24px;">
+              <p style="margin:0;font-size:12px;color:#9a9a9a;line-height:1.6;font-family:Arial,sans-serif;">
+                You received this because someone expressed interest in your concept on <a href="https://findkindred.co" style="color:#9a9a9a;text-decoration:none;">findkindred.co</a>.<br/>
+                Questions? Reply to <a href="mailto:hello@findkindred.co" style="color:#9a9a9a;text-decoration:none;">hello@findkindred.co</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`,
+            text: `${interestedName} wants to build "${concept.title}" with you\n\n${interestedName} expressed interest in your concept "${concept.title}".\n\nTheir reason:\n"${reason}"\n\nIf you want to connect, reach out directly at ${user.email}.\n\nView your concept: ${appUrl}/concepts/${conceptId}\n\n---\nYou received this because someone expressed interest in your concept on findkindred.co.\nQuestions? Reply to hello@findkindred.co`,
           }),
         })
       }
