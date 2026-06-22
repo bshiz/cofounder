@@ -1,4 +1,3 @@
-import { signInWithGoogle } from '@/app/actions'
 import Link from 'next/link'
 
 function GoogleIcon() {
@@ -25,15 +24,13 @@ export default function SignInPage() {
         >
           Share what you&apos;re building and find someone who can&apos;t wait to work on it with you.
         </p>
-        <form action={signInWithGoogle}>
-          <button
-            type="submit"
-            className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-6 py-2.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
-          >
-            <GoogleIcon />
-            Continue with Google
-          </button>
-        </form>
+        <a
+          href="/auth/sign-in"
+          className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-6 py-2.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
+        >
+          <GoogleIcon />
+          Continue with Google
+        </a>
         <p className="mt-4" style={{ fontSize: '13px', color: '#9a9a9a' }}>
           By continuing, you agree to our{' '}
           <Link href="/legal/terms" className="hover:underline" style={{ color: '#9a9a9a' }}>
