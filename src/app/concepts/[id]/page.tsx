@@ -4,6 +4,49 @@ import Image from 'next/image'
 import ConceptBar from './ConceptBar'
 import PrototypePreview from './PrototypePreview'
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const supabase = await createClient()
+  const { data: concept } = await supabase
+    .from('concepts')
+    .select('title, description')
+    .eq('id', id)
+    .single()
+
+  if (!concept) {
+    return {
+      title: 'Kindred',
+      description: 'Where makers find each other.',
+    }
+  }
+
+  return {
+    title: `${concept.title} — Kindred`,
+    description: concept.description,
+    openGraph: {
+      title: `${concept.title} — Kindred`,
+      description: concept.description,
+      url: `https://findkindred.co/concepts/${id}`,
+      siteName: 'Kindred',
+      images: [
+        {
+          url: '/kindred_og.png',
+          width: 1200,
+          height: 630,
+          alt: concept.title,
+        },
+      ],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${concept.title} — Kindred`,
+      description: concept.description,
+      images: ['/kindred_og.png'],
+    },
+  }
+}
+
 type Profile = { full_name: string | null; avatar_url: string | null } | null
 
 function Avatar({ profile, size = 26 }: { profile: Profile; size?: number }) {

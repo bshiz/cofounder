@@ -15,12 +15,34 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: 'Kindred',
-  description: 'Where makers find each other',
+  description: 'Where makers find each other. Share what you\'re building and find someone who can\'t wait to work on it with you.',
+  metadataBase: new URL('https://findkindred.co'),
   icons: {
     icon: [
       { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
       { url: '/favicon.png', sizes: '16x16', type: 'image/png' },
     ],
+  },
+  openGraph: {
+    title: 'Kindred',
+    description: 'Where makers find each other. Share what you\'re building and find someone who can\'t wait to work on it with you.',
+    url: 'https://findkindred.co',
+    siteName: 'Kindred',
+    images: [
+      {
+        url: '/kindred_og.png',
+        width: 1200,
+        height: 630,
+        alt: 'Kindred — Where makers find each other',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Kindred',
+    description: 'Where makers find each other. Share what you\'re building and find someone who can\'t wait to work on it with you.',
+    images: ['/kindred_og.png'],
   },
 }
 
