@@ -172,7 +172,7 @@ export async function expressInterest(
           <tr>
             <td align="center" style="padding-bottom:32px;">
               <img src="https://findkindred.co/kindred-logo.png" alt="Kindred" width="40" height="40" style="display:block;margin:0 auto 8px;" />
-              <span style="font-family:Arial,sans-serif;font-size:18px;font-weight:700;color:#D85050;letter-spacing:-0.5px;">Kindred</span>
+              <span style="font-family:Arial,sans-serif;font-size:18px;font-weight:700;color:#2550FF;letter-spacing:-0.5px;">Kindred</span>
             </td>
           </tr>
 
@@ -191,8 +191,8 @@ export async function expressInterest(
               <!-- Reason block -->
               <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
                 <tr>
-                  <td style="background-color:#faf7f4;border-left:3px solid #D85050;border-radius:0 8px 8px 0;padding:16px 20px;">
-                    <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;color:#D85050;letter-spacing:0.8px;text-transform:uppercase;font-family:Arial,sans-serif;">Their reason</p>
+                  <td style="background-color:#faf7f4;border-left:3px solid #2550FF;border-radius:0 8px 8px 0;padding:16px 20px;">
+                    <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;color:#2550FF;letter-spacing:0.8px;text-transform:uppercase;font-family:Arial,sans-serif;">Their reason</p>
                     <p style="margin:0;font-size:15px;color:#1a1a1a;line-height:1.6;font-style:italic;font-family:Arial,sans-serif;">"${reason}"</p>
                   </td>
                 </tr>
@@ -201,7 +201,7 @@ export async function expressInterest(
               <!-- CTA Button -->
               <table cellpadding="0" cellspacing="0">
                 <tr>
-                  <td style="background-color:#D85050;border-radius:8px;">
+                  <td style="background-color:#2550FF;border-radius:8px;">
                     <a href="mailto:${user.email}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;font-family:Arial,sans-serif;">
                       Reply to ${interestedName} →
                     </a>
