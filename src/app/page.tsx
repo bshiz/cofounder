@@ -128,12 +128,12 @@ export default async function Home({
                         <defs>
                           <pattern id={`geo-${concept.id}`} x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
                             {/* Orange diamond at tile center */}
-                            <polygon points="12,8 16,12 12,16 8,12" fill="#C1440E" opacity="0.07"/>
+                            <polygon points="12,8 16,12 12,16 8,12" fill="#D85050" opacity="0.07"/>
                             {/* Green dot at tile corners — appears as full circle at intersections */}
-                            <circle cx="0" cy="0" r="2" fill="#2D6A4F" opacity="0.06"/>
-                            <circle cx="24" cy="0" r="2" fill="#2D6A4F" opacity="0.06"/>
-                            <circle cx="0" cy="24" r="2" fill="#2D6A4F" opacity="0.06"/>
-                            <circle cx="24" cy="24" r="2" fill="#2D6A4F" opacity="0.06"/>
+                            <circle cx="0" cy="0" r="2" fill="#36577F" opacity="0.06"/>
+                            <circle cx="24" cy="0" r="2" fill="#36577F" opacity="0.06"/>
+                            <circle cx="0" cy="24" r="2" fill="#36577F" opacity="0.06"/>
+                            <circle cx="24" cy="24" r="2" fill="#36577F" opacity="0.06"/>
                           </pattern>
                         </defs>
                         <rect width="100%" height="100%" fill={`url(#geo-${concept.id})`}/>

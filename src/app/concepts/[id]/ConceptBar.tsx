@@ -72,7 +72,7 @@ export default function ConceptBar({
           </div>
         ) : alreadySent ? (
           <div className="flex items-center gap-2 text-sm text-[#4a4a4a]">
-            <CheckCircle size={15} className="text-[#2D6A4F] shrink-0" />
+            <CheckCircle size={15} className="text-[#36577F] shrink-0" />
             <span>
               Interest sent — if {founderName} wants to connect, they&apos;ll reach out to you directly
             </span>
