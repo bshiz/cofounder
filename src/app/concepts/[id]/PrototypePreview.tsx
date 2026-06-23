@@ -19,6 +19,7 @@ export default function PrototypePreview({
   title: string
 }) {
   const [state, setState] = useState<State>({ type: 'loading' })
+  const [iframeActive, setIframeActive] = useState(false)
 
   useEffect(() => {
     if (prototypeUrl) {
@@ -57,7 +58,7 @@ export default function PrototypePreview({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden" onClick={() => setIframeActive(true)} onMouseLeave={() => setIframeActive(false)}>
         {state.type === 'loading' && (
           <div className="flex items-center justify-center h-full">
             <div className="w-5 h-5 border-2 border-gray-200 border-t-gray-500 rounded-full animate-spin" />
@@ -68,7 +69,7 @@ export default function PrototypePreview({
           <iframe
             src={state.url}
             className="w-full h-full"
-            style={{ border: 'none' }}
+            style={{ border: 'none', pointerEvents: iframeActive ? 'auto' : 'none' }}
             title={`${title} preview`}
           />
         )}
@@ -92,7 +93,7 @@ export default function PrototypePreview({
             srcDoc={state.content}
             sandbox="allow-scripts"
             className="w-full h-full"
-            style={{ border: 'none' }}
+            style={{ border: 'none', pointerEvents: iframeActive ? 'auto' : 'none' }}
             title={`${title} preview`}
           />
         )}

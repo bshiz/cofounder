@@ -119,22 +119,20 @@ export default async function ConceptPage({
         {/* Title */}
         <h1 className="text-2xl font-bold text-[#1a1a1a] leading-snug mb-4">{concept.title}</h1>
 
-        {/* Description + Looking for: two columns if both present, single column otherwise */}
-        {concept.collaborator_description ? (
-          <div className="grid grid-cols-2 gap-8">
-            <p className="text-sm text-[#4a4a4a] leading-relaxed">{concept.description}</p>
-            <div>
-              <h2 className="text-xs font-semibold text-[#4a4a4a] uppercase tracking-wider mb-1.5">Looking for</h2>
-              <p className="text-sm text-[#4a4a4a] leading-relaxed">{concept.collaborator_description}</p>
-            </div>
+        {/* Description */}
+        <p className="text-sm text-[#4a4a4a] leading-relaxed max-w-2xl mb-4">{concept.description}</p>
+
+        {/* Looking for */}
+        {concept.collaborator_description && (
+          <div>
+            <h2 className="text-xs font-semibold text-[#4a4a4a] uppercase tracking-wider mb-1.5">Looking for</h2>
+            <p className="text-sm text-[#4a4a4a] leading-relaxed max-w-2xl">{concept.collaborator_description}</p>
           </div>
-        ) : (
-          <p className="text-sm text-[#4a4a4a] leading-relaxed max-w-2xl">{concept.description}</p>
         )}
       </div>
 
-      {/* Prototype iframe: full width, scrolls naturally with page */}
-      <div className="border-t border-gray-100" style={{ height: '700px' }}>
+      {/* Prototype iframe */}
+      <div className="border-t border-gray-100 overflow-hidden w-full" style={{ height: 'calc(100vh - 120px)' }}>
         <PrototypePreview
           prototypeUrl={concept.prototype_url}
           htmlFileUrl={concept.html_file_url}
