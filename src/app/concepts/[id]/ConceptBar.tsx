@@ -46,7 +46,7 @@ export default function ConceptBar({
 
   return (
     <>
-      <div className="fixed bottom-0 left-56 right-0 h-16 bg-white border-t border-gray-200 flex items-center justify-end px-6 z-10">
+      <div className="fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-gray-200 flex items-center justify-end px-6 z-10">
         {!isOwner && !alreadySent && interestCount > 0 && (
           <span className="absolute left-6 text-sm text-[#4a4a4a]">
             {interestCount} {interestCount === 1 ? 'person wants' : 'people want'} to build this

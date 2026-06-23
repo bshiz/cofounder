@@ -104,9 +104,9 @@ export default async function ConceptPage({
   }
 
   return (
-    <div className="pb-16">
+    <div className="pb-16 overflow-x-hidden">
       {/* Top section: concept info above the fold */}
-      <div className="px-8 py-6 overflow-x-hidden">
+      <div className="max-w-[1200px] mx-auto px-8 py-6">
         {/* Founder + category row */}
         <div className="flex items-center gap-2.5 mb-3">
           <Avatar profile={poster} size={28} />
@@ -132,12 +132,14 @@ export default async function ConceptPage({
       </div>
 
       {/* Prototype iframe */}
-      <div className="border-t border-gray-100 overflow-x-hidden w-full">
+      <div className="border-t border-gray-100">
+        <div className="max-w-[1200px] mx-auto">
         <PrototypePreview
           prototypeUrl={concept.prototype_url}
           htmlFileUrl={concept.html_file_url}
           title={concept.title}
         />
+        </div>
       </div>
 
       <ConceptBar
