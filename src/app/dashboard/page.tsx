@@ -104,7 +104,8 @@ export default async function DashboardPage() {
   // Extract concepts from interest rows and fetch their posters
   const interestedConcepts = ((interests ?? [])
     .map((i) => i.concepts)
-    .filter(Boolean)) as ConceptCard[]
+    .flat()
+    .filter(Boolean)) as unknown as ConceptCard[]
 
   const posterIds = [...new Set(interestedConcepts.map((c) => c.user_id))]
   type ProfileRow = { id: string; full_name: string | null; avatar_url: string | null }
