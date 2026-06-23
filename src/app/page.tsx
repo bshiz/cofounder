@@ -123,15 +123,7 @@ export default async function Home({
                       </div>
                     </div>
                   ) : (
-                    <div className="h-48 relative overflow-hidden">
-                      <Image
-                        src="/kindred-placeholder.png"
-                        alt=""
-                        fill
-                        sizes="(max-width: 768px) 100vw, 672px"
-                        className="object-cover"
-                      />
-                    </div>
+                    <div className="h-48" style={{ background: 'linear-gradient(135deg, #0f1120 0%, #1a1f3c 50%, #0d1a3a 100%)' }} />
                   )}
 
                   {/* Content */}
