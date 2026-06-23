@@ -123,7 +123,7 @@ export default async function Home({
                       </div>
                     </div>
                   ) : (
-                    <div className="h-48" style={{ background: 'linear-gradient(135deg, #0f1120 0%, #1a1f3c 50%, #0d1a3a 100%)' }} />
+                    <div className="h-48" style={{ background: 'linear-gradient(135deg, #2550FF 0%, #0f1120 100%)' }} />
                   )}
 
                   {/* Content */}
