@@ -1,4 +1,5 @@
 import { createClient, getUser } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -46,9 +47,15 @@ function Avatar({ profile, size = 28 }: { profile: Profile; size?: number }) {
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; error?: string }>
+  searchParams: Promise<{ category?: string; error?: string; code?: string }>
 }) {
-  const { category, error } = await searchParams
+  const { category, error, code } = await searchParams
+
+  // Safety net: Supabase sometimes sends ?code= to the site URL instead of
+  // /auth/callback when the redirect URL isn't registered in the dashboard.
+  if (code) {
+    redirect(`/auth/callback?code=${encodeURIComponent(code)}`)
+  }
   const [supabase, user] = await Promise.all([createClient(), getUser()])
 
   let query = supabase
