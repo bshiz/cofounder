@@ -58,7 +58,7 @@ export default function HeaderClient({
   return (
     <header className="fixed top-0 left-0 right-0 z-20 h-16 border-b border-gray-200 bg-white flex items-center justify-between px-6">
       <Link href="/" className="flex items-center gap-2">
-        <Image src="/kindred-logo.png" alt="Kindred" width={36} height={36} className="shrink-0" />
+        <Image src="/kindred-logo.png" alt="Kindred" width={48} height={48} className="shrink-0" />
         <span className="text-xl font-bold text-[#1a1a1a] tracking-tight">Kindred</span>
       </Link>
       <div className="flex items-center gap-3">
