@@ -128,18 +128,18 @@ export default async function NewConceptPage({
           </div>
 
           <div className="flex items-center justify-end gap-3 mt-2">
-            <button
-              type="submit"
-              className="rounded-full bg-brand px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-dark"
-            >
-              Post
-            </button>
             <Link
               href="/"
               className="rounded-full border border-gray-300 px-6 py-2.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
             >
               Cancel
             </Link>
+            <button
+              type="submit"
+              className="rounded-full bg-brand px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-dark"
+            >
+              Post
+            </button>
           </div>
         </form>
       </main>
