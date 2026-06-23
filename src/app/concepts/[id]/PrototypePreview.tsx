@@ -9,6 +9,21 @@ type State =
   | { type: 'html'; content: string }
   | { type: 'none' }
 
+function injectResizeScript(content: string): string {
+  const script = `<script>
+window.addEventListener('load', function() {
+  window.parent.postMessage({ iframeHeight: document.body.scrollHeight }, '*');
+});
+window.addEventListener('resize', function() {
+  window.parent.postMessage({ iframeHeight: document.body.scrollHeight }, '*');
+});
+</script>`
+  if (content.includes('</body>')) {
+    return content.replace('</body>', script + '</body>')
+  }
+  return content + script
+}
+
 export default function PrototypePreview({
   prototypeUrl,
   htmlFileUrl,
@@ -19,7 +34,7 @@ export default function PrototypePreview({
   title: string
 }) {
   const [state, setState] = useState<State>({ type: 'loading' })
-  const [iframeActive, setIframeActive] = useState(false)
+  const [iframeHeight, setIframeHeight] = useState(600)
 
   useEffect(() => {
     if (prototypeUrl) {
@@ -43,10 +58,20 @@ export default function PrototypePreview({
     }
   }, [prototypeUrl, htmlFileUrl])
 
+  useEffect(() => {
+    function handleMessage(e: MessageEvent) {
+      if (e.data?.iframeHeight) {
+        setIframeHeight(Math.max(600, Number(e.data.iframeHeight)))
+      }
+    }
+    window.addEventListener('message', handleMessage)
+    return () => window.removeEventListener('message', handleMessage)
+  }, [])
+
   const chromeLabel = prototypeUrl ?? htmlFileUrl ?? title
 
   return (
-    <div className="flex flex-col h-full bg-gray-50">
+    <div className="flex flex-col bg-gray-50">
       {/* Browser chrome */}
       <div className="border-b border-gray-200 px-4 py-2 flex items-center gap-1.5 bg-gray-100 shrink-0">
         <span className="w-3 h-3 rounded-full bg-red-400" />
@@ -57,53 +82,50 @@ export default function PrototypePreview({
         </span>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-hidden" onClick={() => setIframeActive(true)} onMouseLeave={() => setIframeActive(false)}>
-        {state.type === 'loading' && (
-          <div className="flex items-center justify-center h-full">
-            <div className="w-5 h-5 border-2 border-gray-200 border-t-gray-500 rounded-full animate-spin" />
-          </div>
-        )}
+      {state.type === 'loading' && (
+        <div className="flex items-center justify-center" style={{ minHeight: 600 }}>
+          <div className="w-5 h-5 border-2 border-gray-200 border-t-gray-500 rounded-full animate-spin" />
+        </div>
+      )}
 
-        {state.type === 'url-embeddable' && (
-          <iframe
-            src={state.url}
-            className="w-full h-full"
-            style={{ border: 'none', pointerEvents: iframeActive ? 'auto' : 'none' }}
-            title={`${title} preview`}
-          />
-        )}
+      {state.type === 'url-embeddable' && (
+        <iframe
+          src={state.url}
+          className="w-full"
+          style={{ border: 'none', height: 800 }}
+          title={`${title} preview`}
+        />
+      )}
 
-        {state.type === 'url-blocked' && (
-          <div className="flex flex-col items-center justify-center h-full gap-4">
-            <p className="text-sm text-[#4a4a4a]">This prototype can&apos;t be embedded.</p>
-            <a
-              href={state.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
-            >
-              View prototype ↗
-            </a>
-          </div>
-        )}
+      {state.type === 'url-blocked' && (
+        <div className="flex flex-col items-center justify-center gap-4" style={{ minHeight: 600 }}>
+          <p className="text-sm text-[#4a4a4a]">This prototype can&apos;t be embedded.</p>
+          <a
+            href={state.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+          >
+            View prototype ↗
+          </a>
+        </div>
+      )}
 
-        {state.type === 'html' && (
-          <iframe
-            srcDoc={state.content}
-            sandbox="allow-scripts"
-            className="w-full h-full"
-            style={{ border: 'none', pointerEvents: iframeActive ? 'auto' : 'none' }}
-            title={`${title} preview`}
-          />
-        )}
+      {state.type === 'html' && (
+        <iframe
+          srcDoc={injectResizeScript(state.content)}
+          sandbox="allow-scripts"
+          className="w-full"
+          style={{ border: 'none', height: iframeHeight }}
+          title={`${title} preview`}
+        />
+      )}
 
-        {state.type === 'none' && (
-          <div className="flex items-center justify-center h-full">
-            <p className="text-sm text-[#4a4a4a]">No preview available.</p>
-          </div>
-        )}
-      </div>
+      {state.type === 'none' && (
+        <div className="flex items-center justify-center" style={{ minHeight: 600 }}>
+          <p className="text-sm text-[#4a4a4a]">No preview available.</p>
+        </div>
+      )}
     </div>
   )
 }
