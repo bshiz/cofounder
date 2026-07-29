@@ -17,17 +17,6 @@ export default function PrototypeInput() {
       <div className="flex gap-2">
         <button
           type="button"
-          onClick={() => setMode('url')}
-          className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-            mode === 'url'
-              ? 'bg-gray-900 text-white'
-              : 'border border-gray-200 text-[#4a4a4a] hover:border-gray-400 hover:text-[#1a1a1a]'
-          }`}
-        >
-          Paste a URL
-        </button>
-        <button
-          type="button"
           onClick={() => setMode('html')}
           className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
             mode === 'html'
@@ -36,6 +25,17 @@ export default function PrototypeInput() {
           }`}
         >
           Upload an HTML file
+        </button>
+        <button
+          type="button"
+          onClick={() => setMode('url')}
+          className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+            mode === 'url'
+              ? 'bg-gray-900 text-white'
+              : 'border border-gray-200 text-[#4a4a4a] hover:border-gray-400 hover:text-[#1a1a1a]'
+          }`}
+        >
+          Paste a URL
         </button>
       </div>
 

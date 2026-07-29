@@ -67,7 +67,7 @@ export default function HeaderClient({
   }, [])
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-20 h-16 border-b border-gray-200 bg-white flex items-center px-6 gap-4">
+    <header className="fixed top-0 left-0 right-0 z-20 h-16 flex items-center px-6 gap-4" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
       {/* Left: logo + nav links */}
       <div className="flex items-center gap-5 flex-1 min-w-0">
         <Link href="/" className="flex items-center gap-2 shrink-0">
@@ -83,7 +83,7 @@ export default function HeaderClient({
                 : 'text-[#4a4a4a] hover:text-[#1a1a1a] hover:bg-gray-50'
             }`}
           >
-            Home
+            My Links
           </Link>
           <Link
             href="/about"

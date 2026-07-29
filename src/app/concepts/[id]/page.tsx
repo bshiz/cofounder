@@ -87,10 +87,17 @@ export default async function ConceptPage({
 
   const isOwner = user?.id === concept.user_id
 
-  const [{ data: poster }, { count: interestCount }] = await Promise.all([
+  const [{ data: poster }, { count: interestCount }, { data: userProfile }] = await Promise.all([
     supabase.from('profiles').select('full_name, avatar_url').eq('id', concept.user_id).single(),
     supabase.from('interests').select('*', { count: 'exact', head: true }).eq('concept_id', id),
+    user
+      ? supabase.from('profiles').select('is_admin').eq('id', user.id).single()
+      : Promise.resolve({ data: null }),
   ])
+
+  const isAdmin = !!userProfile?.is_admin
+
+  console.log('[concept detail] user.id:', user?.id, '| userProfile:', userProfile, '| isAdmin:', isAdmin)
 
   let existingInterest = false
   if (user && !isOwner) {
@@ -107,26 +114,23 @@ export default async function ConceptPage({
     <div className="pb-16 overflow-x-hidden">
       {/* Top section: concept info above the fold */}
       <div className="max-w-[1200px] mx-auto px-8 py-6">
-        {/* Founder + category row */}
+        {/* Founder row */}
         <div className="flex items-center gap-2.5 mb-3">
           <Avatar profile={poster} size={28} />
           <span className="text-sm text-[#4a4a4a]">{poster?.full_name ?? 'Anonymous'}</span>
-          <span className="inline-block rounded-full bg-accent px-3 py-1 text-xs font-medium text-white">
-            {concept.category}
-          </span>
         </div>
 
         {/* Title */}
-        <h1 className="text-2xl font-bold text-[#1a1a1a] leading-snug mb-4">{concept.title}</h1>
+        <h1 className="text-4xl font-bold text-[#1a1a1a] leading-snug mb-4">{concept.title}</h1>
 
         {/* Description */}
-        <p className="text-sm text-[#4a4a4a] leading-relaxed max-w-2xl mb-4">{concept.description}</p>
+        <p className="text-lg text-[#4a4a4a] leading-relaxed mb-4">{concept.description}</p>
 
         {/* Looking for */}
         {concept.collaborator_description && (
           <div>
             <h2 className="text-xs font-semibold text-[#4a4a4a] uppercase tracking-wider mb-1.5">Looking for</h2>
-            <p className="text-sm text-[#4a4a4a] leading-relaxed max-w-2xl">{concept.collaborator_description}</p>
+            <p className="text-lg text-[#4a4a4a] leading-relaxed">{concept.collaborator_description}</p>
           </div>
         )}
       </div>
@@ -146,9 +150,12 @@ export default async function ConceptPage({
         poster={poster}
         conceptId={id}
         isOwner={isOwner}
+        isAdmin={isAdmin}
         isLoggedIn={!!user}
         existingInterest={existingInterest}
         interestCount={interestCount ?? 0}
+        prototypeUrl={concept.prototype_url ?? null}
+        htmlFileUrl={concept.html_file_url ?? null}
       />
     </div>
   )

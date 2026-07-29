@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useActionState } from 'react'
 import Link from 'next/link'
-import { Link2, Pencil, CheckCircle } from 'lucide-react'
+import { Link2, Pencil, CheckCircle, ExternalLink } from 'lucide-react'
 import { expressInterest } from '@/app/actions'
 import DeleteButton from './DeleteButton'
 
@@ -12,16 +12,22 @@ export default function ConceptBar({
   poster,
   conceptId,
   isOwner,
+  isAdmin,
   isLoggedIn,
   existingInterest,
   interestCount,
+  prototypeUrl,
+  htmlFileUrl,
 }: {
   poster: Profile
   conceptId: string
   isOwner: boolean
+  isAdmin: boolean
   isLoggedIn: boolean
   existingInterest: boolean
   interestCount: number
+  prototypeUrl: string | null
+  htmlFileUrl: string | null
 }) {
   const [modalOpen, setModalOpen] = useState(false)
   const [reason, setReason] = useState('')
@@ -61,6 +67,17 @@ export default function ConceptBar({
               <Link2 size={14} />
               {copied ? 'Copied!' : 'Copy link'}
             </button>
+            {(prototypeUrl || htmlFileUrl) && (
+              <a
+                href={prototypeUrl ?? htmlFileUrl ?? ''}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
+              >
+                <ExternalLink size={14} />
+                Full view
+              </a>
+            )}
             <Link
               href={`/concepts/${conceptId}/edit`}
               className="flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
@@ -70,6 +87,8 @@ export default function ConceptBar({
             </Link>
             <DeleteButton conceptId={conceptId} />
           </div>
+        ) : isAdmin ? (
+          <DeleteButton conceptId={conceptId} />
         ) : alreadySent ? (
           <div className="flex items-center gap-2 text-sm text-[#4a4a4a]">
             <CheckCircle size={15} className="text-[#6B7280] shrink-0" />

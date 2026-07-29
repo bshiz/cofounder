@@ -1,9 +1,7 @@
 import { createClient, getUser } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
-import CopyLinkButton from '@/app/components/CopyLinkButton'
-import DeleteButton from '@/app/concepts/[id]/DeleteButton'
+import ProjectCard from '@/app/components/ProjectCard'
 
 function GoogleIcon() {
   return (
@@ -69,9 +67,6 @@ export default async function Home({
     console.error('[home] concepts query error:', conceptsError)
   }
 
-  const formatDate = (iso: string) =>
-    new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-
   return (
     <>
       {error && (
@@ -80,74 +75,16 @@ export default async function Home({
         </div>
       )}
       <main className="max-w-2xl mx-auto px-6 py-8">
+        <h1 className="text-4xl font-bold text-[#1a1a1a] mb-8 leading-tight">My Links</h1>
         {concepts && concepts.length > 0 ? (
           <div className="flex flex-col gap-4">
             {concepts.map((concept) => (
-              <div
-                key={concept.id}
-                className="rounded-2xl border border-gray-200 overflow-hidden"
-              >
-                {/* Thumbnail */}
-                {concept.thumbnail_url ? (
-                  <div className="h-48 relative overflow-hidden">
-                    <Image
-                      src={concept.thumbnail_url}
-                      alt={concept.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 672px"
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-5">
-                      <h2 className="text-white text-lg font-bold leading-snug line-clamp-2 drop-shadow-sm">
-                        {concept.title}
-                      </h2>
-                    </div>
-                  </div>
-                ) : (
-                  <div
-                    className="h-48 flex items-end p-5"
-                    style={{ background: 'linear-gradient(135deg, #2550FF 0%, #0f1120 100%)' }}
-                  >
-                    <h2 className="text-white text-lg font-bold leading-snug line-clamp-2">
-                      {concept.title}
-                    </h2>
-                  </div>
-                )}
-
-                {/* Content */}
-                <div className="px-5 py-4">
-                  {concept.description && (
-                    <p className="text-sm text-[#4a4a4a] mb-3 line-clamp-2 leading-relaxed">
-                      {concept.description}
-                    </p>
-                  )}
-                  <p className="text-xs text-[#9a9a9a] mb-4">{formatDate(concept.created_at)}</p>
-
-                  {/* Quick actions */}
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <Link
-                      href={`/concepts/${concept.id}`}
-                      className="rounded-full border border-gray-200 px-4 py-1.5 text-xs font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
-                    >
-                      View
-                    </Link>
-                    <CopyLinkButton path={`/concepts/${concept.id}`} />
-                    <Link
-                      href={`/concepts/${concept.id}/edit`}
-                      className="rounded-full border border-gray-200 px-4 py-1.5 text-xs font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
-                    >
-                      Edit
-                    </Link>
-                    <DeleteButton conceptId={concept.id} />
-                  </div>
-                </div>
-              </div>
+              <ProjectCard key={concept.id} concept={concept} />
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-32 text-center">
-            <p className="text-[#4a4a4a] text-lg mb-4">You haven&apos;t shared anything yet.</p>
+          <div className="flex flex-col items-start gap-4">
+            <p className="text-[#4a4a4a]">You haven&apos;t shared anything yet.</p>
             <Link
               href="/concepts/new"
               className="rounded-full bg-brand px-6 py-2 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
