@@ -41,10 +41,8 @@ function GoogleIcon() {
 }
 
 export default async function Header({
-  showSignOut = false,
   showPostButton = true,
 }: {
-  showSignOut?: boolean
   showPostButton?: boolean
 }) {
   const supabase = await createClient()
@@ -78,19 +76,15 @@ export default async function Header({
                 Post a Concept
               </Link>
             )}
-            <Link href="/dashboard">
-              <Avatar profile={userProfile} size={28} />
-            </Link>
-            {showSignOut && (
-              <form action="/auth/signout" method="POST">
-                <button
-                  type="submit"
-                  className="text-sm text-[#4a4a4a] hover:text-[#4a4a4a] transition-colors"
-                >
-                  Sign out
-                </button>
-              </form>
-            )}
+            <Avatar profile={userProfile} size={28} />
+            <form action="/auth/signout" method="POST">
+              <button
+                type="submit"
+                className="text-sm text-[#4a4a4a] hover:text-[#1a1a1a] transition-colors"
+              >
+                Sign out
+              </button>
+            </form>
           </>
         ) : (
           <form action={signInWithGoogle}>

@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useState, useRef, useEffect } from 'react'
 
 type User = { id: string; email: string | null } | null
 type Profile = { full_name: string | null; avatar_url: string | null } | null
@@ -50,31 +51,95 @@ export default function HeaderClient({
   userProfile: Profile
 }) {
   const pathname = usePathname()
-  const showPostButton =
-    pathname !== '/dashboard' &&
-    pathname !== '/concepts/new' &&
-    !pathname.endsWith('/edit')
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const showPostButton = pathname !== '/concepts/new' && !pathname.endsWith('/edit')
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-20 h-16 border-b border-gray-200 bg-white flex items-center justify-between px-6">
-      <Link href="/" className="flex items-center gap-2">
-        <Image src="/kindred-logo.png" alt="Kindred" width={48} height={48} className="shrink-0" />
-        <span className="text-xl font-bold text-[#1a1a1a] tracking-tight">Kindred</span>
-      </Link>
-      <div className="flex items-center gap-3">
+    <header className="fixed top-0 left-0 right-0 z-20 h-16 border-b border-gray-200 bg-white flex items-center px-6 gap-4">
+      {/* Left: logo + nav links */}
+      <div className="flex items-center gap-5 flex-1 min-w-0">
+        <Link href="/" className="flex items-center gap-2 shrink-0">
+          <Image src="/kindred-logo.png" alt="Kindred" width={48} height={48} className="shrink-0" />
+          <span className="text-xl font-bold text-[#1a1a1a] tracking-tight">Kindred</span>
+        </Link>
+        <nav className="hidden sm:flex items-center gap-0.5">
+          <Link
+            href="/"
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+              pathname === '/'
+                ? 'text-[#1a1a1a] bg-gray-100'
+                : 'text-[#4a4a4a] hover:text-[#1a1a1a] hover:bg-gray-50'
+            }`}
+          >
+            Home
+          </Link>
+          <Link
+            href="/about"
+            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+              pathname === '/about'
+                ? 'text-[#1a1a1a] bg-gray-100'
+                : 'text-[#4a4a4a] hover:text-[#1a1a1a] hover:bg-gray-50'
+            }`}
+          >
+            About
+          </Link>
+        </nav>
+      </div>
+
+      {/* Right: actions */}
+      <div className="flex items-center gap-3 shrink-0">
         {user ? (
           <>
             {showPostButton && (
               <Link
                 href="/concepts/new"
-                className="rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
+                className="hidden sm:inline-flex rounded-full bg-brand px-4 py-1.5 text-sm font-medium text-white hover:bg-brand-dark transition-colors"
               >
-                Post a concept
+                Upload a project
               </Link>
             )}
-            <Link href="/dashboard">
-              <Avatar profile={userProfile} size={28} />
-            </Link>
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setDropdownOpen((v) => !v)}
+                className="rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                aria-label="Account menu"
+              >
+                <Avatar profile={userProfile} size={28} />
+              </button>
+              {dropdownOpen && (
+                <div className="absolute right-0 top-full mt-2 w-40 rounded-xl border border-gray-200 bg-white shadow-lg py-1 z-30">
+                  {showPostButton && (
+                    <Link
+                      href="/concepts/new"
+                      onClick={() => setDropdownOpen(false)}
+                      className="sm:hidden block w-full text-left px-4 py-2 text-sm text-[#4a4a4a] hover:bg-gray-50 transition-colors"
+                    >
+                      Upload a project
+                    </Link>
+                  )}
+                  <form action="/auth/signout" method="POST">
+                    <button
+                      type="submit"
+                      className="w-full text-left px-4 py-2 text-sm text-[#4a4a4a] hover:bg-gray-50 transition-colors"
+                    >
+                      Sign out
+                    </button>
+                  </form>
+                </div>
+              )}
+            </div>
           </>
         ) : (
           <Link

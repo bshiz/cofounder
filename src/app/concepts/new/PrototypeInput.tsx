@@ -3,14 +3,14 @@
 import { useState } from 'react'
 
 export default function PrototypeInput() {
-  const [mode, setMode] = useState<'url' | 'html'>('url')
+  const [mode, setMode] = useState<'url' | 'html'>('html')
 
   return (
     <div className="flex flex-col gap-3">
       <div>
-        <p className="text-sm font-medium text-[#4a4a4a] mb-1">Your prototype</p>
+        <p className="text-sm font-medium text-[#4a4a4a] mb-1">Your project</p>
         <p className="text-xs text-[#4a4a4a]">
-          Share your Loveable, Vercel, or any live URL — or upload a self-contained HTML file.
+          Share a live URL, or upload a self-contained HTML file.
         </p>
       </div>
 

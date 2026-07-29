@@ -8,23 +8,19 @@ export default function AboutPage() {
           What is Kindred?
         </h1>
         <p className="text-[#4a4a4a] leading-relaxed text-base">
-          Kindred is for anyone who has started building a software product and wants to find the
-          right person to take it further with them.
+          You&apos;re building things with AI, HTML presentations, prototypes, small tools like an
+          expense tracker or a calculator. Right now, sharing them means sending a file through Slack
+          or email. It works once. Then you update it, and you&apos;re sending a new file, and whoever
+          had the old one is stuck on a stale version.
         </p>
         <p className="text-[#4a4a4a] leading-relaxed text-base mt-5">
-          Your prototype is your profile. Instead of a resume or a skills list, you show what
-          you&apos;re actually working on. What you&apos;ve built says more about you than anything
-          else — it shows how you think, what problems you find worth solving, and whether
-          you&apos;re the kind of person who actually makes things happen.
+          Kindred gives what you build a permanent home. Upload it once, get a link, and update it
+          any time. The link never changes, so everyone you&apos;ve shared it with always sees the
+          current version.
         </p>
         <p className="text-[#4a4a4a] leading-relaxed text-base mt-5">
-          This isn&apos;t just for developers or designers. It&apos;s for you — whether you built
-          your first prototype with Loveable, Claude, or any other tool. Whatever industry you&apos;re
-          in, whatever background you come from, if you&apos;ve started something real and you&apos;re
-          looking for someone who gets it, you&apos;re in the right place.
-        </p>
-        <p className="text-[#4a4a4a] leading-relaxed text-base mt-5">
-          Share what you&apos;re building. Find someone who can&apos;t wait to work on it with you.
+          You don&apos;t need to be a developer. If you can build something with AI, you can share
+          it with Kindred.
         </p>
       </main>
     </div>

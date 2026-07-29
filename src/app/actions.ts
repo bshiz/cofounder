@@ -33,13 +33,11 @@ export async function createConcept(formData: FormData) {
 
   const title = (formData.get('title') as string).trim()
   const description = (formData.get('description') as string).trim()
-  const collaboratorDescription = (formData.get('collaborator_description') as string | null)?.trim() || null
-  const category = formData.get('category') as string
   const prototypeUrl = (formData.get('prototype_url') as string | null)?.trim() || null
   const htmlFile = formData.get('html_file') as File
   const thumbnailFile = formData.get('thumbnail_file') as File
 
-  if (!title || !description || !category) {
+  if (!title || !description) {
     redirect('/concepts/new?error=All+fields+are+required')
   }
   if (!prototypeUrl && !htmlFile?.size) {
@@ -81,7 +79,7 @@ export async function createConcept(formData: FormData) {
 
   const { data: concept, error: insertError } = await supabase
     .from('concepts')
-    .insert({ user_id: user.id, title, description, collaborator_description: collaboratorDescription, category, prototype_url: prototypeUrl, html_file_url, thumbnail_url })
+    .insert({ user_id: user.id, title, description, prototype_url: prototypeUrl, html_file_url, thumbnail_url })
     .select('id')
     .single()
 
@@ -257,7 +255,7 @@ export async function updateConcept(formData: FormData) {
   const htmlFile = formData.get('html_file') as File
   const thumbnailFile = formData.get('thumbnail_file') as File
 
-  if (!title || !description || !category) {
+  if (!title || !description) {
     redirect(`/concepts/${conceptId}/edit?error=All+fields+are+required`)
   }
 
@@ -359,15 +357,25 @@ export async function deleteConcept(formData: FormData) {
 
   const conceptId = formData.get('concept_id') as string
 
-  // Verify ownership and get file URL before deleting
+  // Check if the user is an admin
+  const { data: userProfile } = await supabase
+    .from('profiles')
+    .select('is_admin')
+    .eq('id', user.id)
+    .single()
+  const isAdmin = userProfile?.is_admin === true
+
+  // Verify ownership or admin and get file URL before deleting
   const { data: concept } = await supabase
     .from('concepts')
     .select('user_id, html_file_url')
     .eq('id', conceptId)
     .single()
 
-  if (!concept || concept.user_id !== user.id) {
-    redirect('/dashboard?error=Not+authorized')
+  const isOwner = concept?.user_id === user.id
+
+  if (!concept || (!isOwner && !isAdmin)) {
+    redirect('/?error=Not+authorized')
   }
 
   // Delete HTML file from storage (best-effort)
@@ -383,7 +391,13 @@ export async function deleteConcept(formData: FormData) {
     }
   }
 
-  await supabase.from('concepts').delete().eq('id', conceptId).eq('user_id', user.id)
-
-  redirect('/dashboard')
+  if (isOwner) {
+    await supabase.from('concepts').delete().eq('id', conceptId).eq('user_id', user.id)
+    redirect('/')
+  } else {
+    // Admin delete — bypass RLS with service role client
+    const admin = createAdminClient()
+    await admin.from('concepts').delete().eq('id', conceptId)
+    redirect('/')
+  }
 }

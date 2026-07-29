@@ -16,13 +16,13 @@ export default function SignInPage() {
     <div className="flex items-center justify-center min-h-[calc(100vh-4rem)]">
       <div className="flex flex-col items-center text-center px-6">
         <h1 className="text-4xl font-bold text-[#1a1a1a] mb-4 leading-tight">
-          Where makers find each other.
+          A permanent link for what you build.
         </h1>
         <p
           className="mb-8 leading-relaxed"
           style={{ fontSize: '16px', color: '#4a4a4a', maxWidth: '380px' }}
         >
-          Share what you&apos;re building and find someone who can&apos;t wait to work on it with you.
+          Upload something you made with AI and get a link that always shows the latest version.
         </p>
         <a
           href="/auth/sign-in"
