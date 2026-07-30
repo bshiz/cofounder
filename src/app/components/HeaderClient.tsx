@@ -83,7 +83,7 @@ export default function HeaderClient({
                 : 'text-[#4a4a4a] hover:text-[#1a1a1a] hover:bg-gray-50'
             }`}
           >
-            My Links
+            My Projects
           </Link>
           <Link
             href="/about"

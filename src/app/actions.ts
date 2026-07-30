@@ -48,10 +48,11 @@ export async function createConcept(formData: FormData) {
 
   if (htmlFile?.size) {
     const path = `${user.id}/${Date.now()}.html`
+    const htmlBlob = new Blob([await htmlFile.arrayBuffer()], { type: 'text/html' })
 
     const { data: upload, error: uploadError } = await supabase.storage
       .from('concepts')
-      .upload(path, htmlFile, { contentType: 'text/html', upsert: false })
+      .upload(path, htmlBlob, { contentType: 'text/html', upsert: false })
 
     if (uploadError) {
       redirect(`/concepts/new?error=${encodeURIComponent(uploadError.message)}`)
@@ -279,10 +280,11 @@ export async function updateConcept(formData: FormData) {
   // Replace the HTML file only if a new one was uploaded
   if (htmlFile?.size > 0) {
     const newPath = `${user.id}/${Date.now()}.html`
+    const htmlBlob = new Blob([await htmlFile.arrayBuffer()], { type: 'text/html' })
 
     const { data: upload, error: uploadError } = await supabase.storage
       .from('concepts')
-      .upload(newPath, htmlFile, { contentType: 'text/html', upsert: false })
+      .upload(newPath, htmlBlob, { contentType: 'text/html', upsert: false })
 
     if (uploadError) {
       redirect(`/concepts/${conceptId}/edit?error=${encodeURIComponent(uploadError.message)}`)

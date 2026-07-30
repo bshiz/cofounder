@@ -74,10 +74,10 @@ export default async function Home({
           {decodeURIComponent(error)}
         </div>
       )}
-      <main className="max-w-2xl mx-auto px-6 py-8">
-        <h1 className="text-4xl font-bold text-[#1a1a1a] mb-8 leading-tight">My Links</h1>
+      <main className="max-w-6xl mx-auto px-6 py-8">
+        <h1 className="text-4xl font-bold text-[#1a1a1a] mb-8 leading-tight">My Projects</h1>
         {concepts && concepts.length > 0 ? (
-          <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {concepts.map((concept) => (
               <ProjectCard key={concept.id} concept={concept} />
             ))}
