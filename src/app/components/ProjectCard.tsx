@@ -35,10 +35,7 @@ export default function ProjectCard({ concept }: { concept: Project }) {
             />
           </div>
         ) : (
-          <div
-            className="h-52"
-            style={{ background: 'linear-gradient(135deg, #2550FF 0%, #0f1120 100%)' }}
-          />
+          <div className="h-52 bg-gray-100" />
         )}
 
         <div className="px-5 py-5">
