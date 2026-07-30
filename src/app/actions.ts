@@ -37,8 +37,8 @@ export async function createConcept(formData: FormData) {
   const htmlFile = formData.get('html_file') as File
   const thumbnailFile = formData.get('thumbnail_file') as File
 
-  if (!title || !description) {
-    redirect('/concepts/new?error=All+fields+are+required')
+  if (!title) {
+    redirect('/concepts/new?error=Title+is+required')
   }
   if (!prototypeUrl && !htmlFile?.size) {
     redirect('/concepts/new?error=Please+provide+a+prototype+URL+or+upload+an+HTML+file')

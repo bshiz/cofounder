@@ -23,7 +23,7 @@ export default function NewConceptForm({ error }: { error?: string }) {
       >
         <div className="flex flex-col gap-1.5">
           <label htmlFor="title" className="text-sm font-medium text-[#4a4a4a]">
-            Title
+            Title <span className="text-red-500">*</span>
           </label>
           <input
             id="title"
@@ -43,7 +43,6 @@ export default function NewConceptForm({ error }: { error?: string }) {
           <textarea
             id="description"
             name="description"
-            required
             rows={4}
             disabled={isSubmitting}
             placeholder="What does it do?"
@@ -56,7 +55,6 @@ export default function NewConceptForm({ error }: { error?: string }) {
         <div className="flex flex-col gap-1.5">
           <label htmlFor="thumbnail_file" className="text-sm font-medium text-[#4a4a4a]">
             Thumbnail image
-            <span className="ml-1.5 text-[#4a4a4a] font-normal">(optional)</span>
           </label>
           <p className="text-xs text-[#4a4a4a] -mt-0.5">
             Upload a screenshot or image that represents your concept — this is what people will see in the feed

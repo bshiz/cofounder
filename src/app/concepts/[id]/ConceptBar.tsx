@@ -69,7 +69,7 @@ export default function ConceptBar({
             </button>
             {(prototypeUrl || htmlFileUrl) && (
               <a
-                href={prototypeUrl ?? htmlFileUrl ?? ''}
+                href={prototypeUrl ?? `/api/serve/${conceptId}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-1.5 rounded-full border border-gray-300 px-4 py-1.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"

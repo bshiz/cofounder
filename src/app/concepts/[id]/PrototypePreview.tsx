@@ -6,29 +6,16 @@ type State =
   | { type: 'loading' }
   | { type: 'url-embeddable'; url: string }
   | { type: 'url-blocked'; url: string }
-  | { type: 'html'; content: string }
+  | { type: 'html'; proxyUrl: string }
   | { type: 'none' }
 
-function injectResizeScript(content: string): string {
-  const script = `<script>
-window.addEventListener('load', function() {
-  window.parent.postMessage({ iframeHeight: document.body.scrollHeight }, '*');
-});
-window.addEventListener('resize', function() {
-  window.parent.postMessage({ iframeHeight: document.body.scrollHeight }, '*');
-});
-</script>`
-  if (content.includes('</body>')) {
-    return content.replace('</body>', script + '</body>')
-  }
-  return content + script
-}
-
 export default function PrototypePreview({
+  conceptId,
   prototypeUrl,
   htmlFileUrl,
   title,
 }: {
+  conceptId: string
   prototypeUrl?: string | null
   htmlFileUrl?: string | null
   title: string
@@ -49,14 +36,11 @@ export default function PrototypePreview({
         })
         .catch(() => setState({ type: 'url-blocked', url: prototypeUrl }))
     } else if (htmlFileUrl) {
-      fetch(htmlFileUrl)
-        .then((r) => (r.ok ? r.text() : '<p>Could not load preview.</p>'))
-        .then((content) => setState({ type: 'html', content }))
-        .catch(() => setState({ type: 'html', content: '<p>Could not load preview.</p>' }))
+      setState({ type: 'html', proxyUrl: `/api/serve/${conceptId}` })
     } else {
       setState({ type: 'none' })
     }
-  }, [prototypeUrl, htmlFileUrl])
+  }, [conceptId, prototypeUrl, htmlFileUrl])
 
   useEffect(() => {
     function handleMessage(e: MessageEvent) {
@@ -113,7 +97,7 @@ export default function PrototypePreview({
 
       {state.type === 'html' && (
         <iframe
-          srcDoc={injectResizeScript(state.content)}
+          src={state.proxyUrl}
           sandbox="allow-scripts"
           className="w-full"
           style={{ border: 'none', height: iframeHeight }}

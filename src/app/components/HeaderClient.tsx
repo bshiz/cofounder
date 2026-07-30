@@ -77,7 +77,7 @@ export default function HeaderClient({
         <nav className="hidden sm:flex items-center gap-0.5">
           <Link
             href="/"
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+            className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
               pathname === '/'
                 ? 'text-[#1a1a1a] bg-gray-100'
                 : 'text-[#4a4a4a] hover:text-[#1a1a1a] hover:bg-gray-50'
@@ -87,7 +87,7 @@ export default function HeaderClient({
           </Link>
           <Link
             href="/about"
-            className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+            className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
               pathname === '/about'
                 ? 'text-[#1a1a1a] bg-gray-100'
                 : 'text-[#4a4a4a] hover:text-[#1a1a1a] hover:bg-gray-50'

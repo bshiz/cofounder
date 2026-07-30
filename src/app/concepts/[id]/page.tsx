@@ -139,6 +139,7 @@ export default async function ConceptPage({
       <div className="border-t border-gray-100">
         <div className="max-w-[1200px] mx-auto">
         <PrototypePreview
+          conceptId={id}
           prototypeUrl={concept.prototype_url}
           htmlFileUrl={concept.html_file_url}
           title={concept.title}

@@ -30,7 +30,7 @@ export default function DeleteButton({ conceptId }: { conceptId: string }) {
           }}
         >
           <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4 shadow-xl">
-            <h2 className="text-base font-semibold text-[#1a1a1a] mb-1">Delete this concept?</h2>
+            <h2 className="text-base font-semibold text-[#1a1a1a] mb-1">Delete this project?</h2>
             <p className="text-sm text-[#4a4a4a] mb-6">
               This will permanently remove it and all associated data.
             </p>

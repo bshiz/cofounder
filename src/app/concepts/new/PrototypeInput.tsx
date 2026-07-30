@@ -8,20 +8,20 @@ export default function PrototypeInput() {
   return (
     <div className="flex flex-col gap-3">
       <div>
-        <p className="text-sm font-medium text-[#4a4a4a] mb-1">Your project</p>
+        <p className="text-sm font-medium text-[#4a4a4a] mb-1">File or link <span className="text-red-500">*</span></p>
         <p className="text-xs text-[#4a4a4a]">
           Share a live URL, or upload a self-contained HTML file.
         </p>
       </div>
 
-      <div className="flex gap-2">
+      <div className="inline-flex rounded-lg bg-gray-100 p-1 gap-1">
         <button
           type="button"
           onClick={() => setMode('html')}
-          className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+          className={`rounded-md px-4 py-1.5 text-sm font-medium transition-all ${
             mode === 'html'
-              ? 'bg-gray-900 text-white'
-              : 'border border-gray-200 text-[#4a4a4a] hover:border-gray-400 hover:text-[#1a1a1a]'
+              ? 'bg-white text-[#1a1a1a] shadow-sm'
+              : 'text-[#4a4a4a] hover:text-[#1a1a1a]'
           }`}
         >
           Upload an HTML file
@@ -29,10 +29,10 @@ export default function PrototypeInput() {
         <button
           type="button"
           onClick={() => setMode('url')}
-          className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+          className={`rounded-md px-4 py-1.5 text-sm font-medium transition-all ${
             mode === 'url'
-              ? 'bg-gray-900 text-white'
-              : 'border border-gray-200 text-[#4a4a4a] hover:border-gray-400 hover:text-[#1a1a1a]'
+              ? 'bg-white text-[#1a1a1a] shadow-sm'
+              : 'text-[#4a4a4a] hover:text-[#1a1a1a]'
           }`}
         >
           Paste a URL
