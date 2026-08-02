@@ -34,7 +34,7 @@ const mcpHandler = createMcpHandler(
         const { data: tokenData } = await admin
           .from('mcp_oauth_tokens')
           .select('user_id')
-          .eq('token', context.authInfo?.token ?? '')
+          .eq('token', context.http?.authInfo?.token ?? '')
           .single()
 
         if (!tokenData?.user_id) {
