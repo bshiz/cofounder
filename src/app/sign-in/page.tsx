@@ -26,10 +26,10 @@ export default function SignInPage() {
         </p>
         <a
           href="/auth/sign-in"
-          className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-6 py-2.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
+          className="flex items-center gap-2.5 rounded-full bg-brand px-7 py-3 text-sm font-semibold text-white hover:bg-brand-dark transition-colors"
         >
           <GoogleIcon />
-          Continue with Google
+          Sign in with Google
         </a>
         <p className="mt-4" style={{ fontSize: '13px', color: '#9a9a9a' }}>
           By continuing, you agree to our{' '}

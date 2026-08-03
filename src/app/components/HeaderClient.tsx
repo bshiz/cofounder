@@ -70,32 +70,33 @@ export default function HeaderClient({
     <header className="fixed top-0 left-0 right-0 z-20 h-16 flex items-center px-6 gap-4" style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
       {/* Left: logo + nav links */}
       <div className="flex items-center gap-5 flex-1 min-w-0">
-        <Link href="/" className="flex items-center gap-2 shrink-0">
+        <Link href="/" className="flex items-center shrink-0">
           <Image src="/kindred-logo.png" alt="Kindred" width={48} height={48} className="shrink-0" />
-          <span className="text-xl font-bold text-[#1a1a1a] tracking-tight">Kindred</span>
         </Link>
-        <nav className="hidden sm:flex items-center gap-0.5">
-          <Link
-            href="/"
-            className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-              pathname === '/'
-                ? 'text-[#1a1a1a] bg-gray-100'
-                : 'text-[#4a4a4a] hover:text-[#1a1a1a] hover:bg-gray-50'
-            }`}
-          >
-            My Projects
-          </Link>
-          <Link
-            href="/about"
-            className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-              pathname === '/about'
-                ? 'text-[#1a1a1a] bg-gray-100'
-                : 'text-[#4a4a4a] hover:text-[#1a1a1a] hover:bg-gray-50'
-            }`}
-          >
-            About
-          </Link>
-        </nav>
+        {user && (
+          <nav className="hidden sm:flex items-center gap-0.5">
+            <Link
+              href="/"
+              className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+                pathname === '/'
+                  ? 'text-[#1a1a1a] bg-gray-100'
+                  : 'text-[#4a4a4a] hover:text-[#1a1a1a] hover:bg-gray-50'
+              }`}
+            >
+              My Projects
+            </Link>
+            <Link
+              href="/about"
+              className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+                pathname === '/about'
+                  ? 'text-[#1a1a1a] bg-gray-100'
+                  : 'text-[#4a4a4a] hover:text-[#1a1a1a] hover:bg-gray-50'
+              }`}
+            >
+              How Kindred works
+            </Link>
+          </nav>
+        )}
       </div>
 
       {/* Right: actions */}
@@ -144,10 +145,10 @@ export default function HeaderClient({
         ) : (
           <Link
             href="/sign-in"
-            className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-1.5 text-sm font-medium text-[#4a4a4a] hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 rounded-full bg-gray-100 px-4 py-1.5 text-sm font-medium text-[#1a1a1a] hover:bg-gray-200 transition-colors"
           >
             <GoogleIcon />
-            Sign in
+            Sign in with Google
           </Link>
         )}
       </div>
