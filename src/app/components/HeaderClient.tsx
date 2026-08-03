@@ -144,7 +144,7 @@ export default function HeaderClient({
           </>
         ) : (
           <Link
-            href="/sign-in"
+            href="/auth/sign-in"
             className="flex items-center gap-2 rounded-full bg-gray-100 px-4 py-1.5 text-sm font-medium text-[#1a1a1a] hover:bg-gray-200 transition-colors"
           >
             <GoogleIcon />
