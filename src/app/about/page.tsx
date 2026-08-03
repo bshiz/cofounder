@@ -49,7 +49,7 @@ export default function AboutPage() {
         <h2 className="text-xl font-bold text-[#1a1a1a] mb-3">Connect Claude (MCP)</h2>
         <p className="text-base text-[#4a4a4a] leading-relaxed mb-8">
           This is what makes updating effortless. Once connected, you can ask Claude to update your
-          Kindred project directly from a conversation — no downloading, no re-uploading, no
+          Kindred project directly from a conversation, no downloading, no re-uploading, no
           switching tabs.
         </p>
 
