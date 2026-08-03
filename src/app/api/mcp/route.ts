@@ -21,11 +21,12 @@ const mcpHandler = createMcpHandler(
       'push_project',
       {
         title: 'Push Project',
-        description: 'Upload an HTML prototype and create a new project on Kindred.',
+        description: 'Upload an HTML prototype and create or update a project on Kindred.',
         inputSchema: z.object({
           title: z.string().describe('The project title'),
           description: z.string().optional().describe('A short description of the project'),
           html_content: z.string().describe('The full HTML content of the prototype'),
+          project_id: z.string().optional().describe('Existing project ID to update. If omitted, falls back to title matching then creates a new project.'),
         }),
       },
       async (args, context) => {
@@ -41,6 +42,7 @@ const mcpHandler = createMcpHandler(
           return { content: [{ type: 'text' as const, text: 'Error: could not resolve user from token' }] }
         }
 
+        // Upload new HTML to storage
         const path = `${tokenData.user_id}/${Date.now()}.html`
         const htmlBlob = new Blob([args.html_content], { type: 'text/html' })
 
@@ -53,6 +55,44 @@ const mcpHandler = createMcpHandler(
         }
 
         const html_file_url = admin.storage.from('concepts').getPublicUrl(upload.path).data.publicUrl
+
+        // Resolve existing concept to update
+        let existingId: string | null = null
+
+        if (args.project_id) {
+          const { data } = await admin
+            .from('concepts')
+            .select('id')
+            .eq('id', args.project_id)
+            .eq('user_id', tokenData.user_id)
+            .maybeSingle()
+          if (data) existingId = data.id
+        }
+
+        if (!existingId) {
+          const { data } = await admin
+            .from('concepts')
+            .select('id')
+            .eq('user_id', tokenData.user_id)
+            .ilike('title', args.title)
+            .limit(1)
+            .maybeSingle()
+          if (data) existingId = data.id
+        }
+
+        if (existingId) {
+          const { error: updateError } = await admin
+            .from('concepts')
+            .update({ title: args.title, description: args.description ?? null, html_file_url })
+            .eq('id', existingId)
+
+          if (updateError) {
+            return { content: [{ type: 'text' as const, text: `Error updating project: ${updateError.message}` }] }
+          }
+
+          const url = `https://findkindred.co/concepts/${existingId}`
+          return { content: [{ type: 'text' as const, text: JSON.stringify({ created: false, project_id: existingId, url }) }] }
+        }
 
         const { data: concept, error: insertError } = await admin
           .from('concepts')
@@ -70,7 +110,7 @@ const mcpHandler = createMcpHandler(
         }
 
         const url = `https://findkindred.co/concepts/${concept.id}`
-        return { content: [{ type: 'text' as const, text: `Project created: ${url}` }] }
+        return { content: [{ type: 'text' as const, text: JSON.stringify({ created: true, project_id: concept.id, url }) }] }
       }
     )
   },
