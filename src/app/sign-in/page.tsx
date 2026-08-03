@@ -26,7 +26,7 @@ export default function SignInPage() {
         </p>
         <a
           href="/auth/sign-in"
-          className="flex items-center gap-2.5 rounded-full bg-brand px-7 py-3 text-sm font-semibold text-white hover:bg-brand-dark transition-colors"
+          className="flex items-center gap-2.5 rounded-full bg-gray-100 px-7 py-3 text-sm font-semibold text-[#1a1a1a] hover:bg-gray-200 transition-colors"
         >
           <GoogleIcon />
           Sign in with Google

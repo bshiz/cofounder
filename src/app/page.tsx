@@ -25,7 +25,7 @@ function GoogleCTA() {
     <form action={signInWithGoogle}>
       <button
         type="submit"
-        className="flex items-center gap-2.5 rounded-full bg-brand px-7 py-3 text-sm font-semibold text-white hover:bg-brand-dark transition-colors"
+        className="flex items-center gap-2.5 rounded-full bg-gray-100 px-7 py-3 text-sm font-semibold text-[#1a1a1a] hover:bg-gray-200 transition-colors"
       >
         <GoogleIcon />
         Sign in with Google
@@ -60,20 +60,28 @@ export default async function Home({
         <main>
 
           {/* ── HERO ── */}
-          <section className="max-w-6xl mx-auto px-6 py-16 lg:py-24">
+          <section className="relative overflow-hidden" style={{ background: '#0d1456' }}>
+            {/* Blurred gradient blobs */}
+            <div aria-hidden className="absolute inset-0 pointer-events-none">
+              <div className="absolute -top-20 -right-20 w-[700px] h-[700px] rounded-full" style={{ background: '#2550FF', filter: 'blur(140px)', opacity: 0.75 }} />
+              <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] rounded-full" style={{ background: '#3a5cff', filter: 'blur(120px)', opacity: 0.5 }} />
+              <div className="absolute -bottom-20 -left-20 w-[400px] h-[400px] rounded-full" style={{ background: '#060c2e', filter: 'blur(100px)', opacity: 0.9 }} />
+            </div>
+
+            <div className="relative max-w-6xl mx-auto px-6 py-16 lg:py-24">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
               {/* Left: headline + CTA */}
               <div>
-                <h1 className="text-5xl lg:text-6xl font-bold text-[#1a1a1a] leading-[1.05] tracking-tight mb-6">
+                <h1 className="text-5xl lg:text-6xl font-bold text-white leading-[1.05] tracking-tight mb-6">
                   Give your code projects a home you can share.
                 </h1>
-                <p className="text-lg text-[#4a4a4a] leading-relaxed mb-8 max-w-md">
+                <p className="text-lg text-blue-100 leading-relaxed mb-8 max-w-md">
                   Upload an HTML file, get a permanent link, easily update with MCP.
                 </p>
                 <div className="flex flex-wrap items-center gap-4">
                   <GoogleCTA />
-                  <span className="text-sm text-[#9a9a9a]">Free to get started</span>
+                  <span className="text-sm text-blue-200">Free to get started</span>
                 </div>
               </div>
 
@@ -120,6 +128,7 @@ export default async function Home({
                 </div>
               </div>
 
+            </div>
             </div>
           </section>
 
