@@ -16,12 +16,6 @@ export const metadata: Metadata = {
   title: 'Kindred',
   description: 'Where makers find each other. Share what you\'re building and find someone who can\'t wait to work on it with you.',
   metadataBase: new URL('https://findkindred.co'),
-  icons: {
-    icon: [
-      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon.png', sizes: '16x16', type: 'image/png' },
-    ],
-  },
   openGraph: {
     title: 'Kindred',
     description: 'Where makers find each other. Share what you\'re building and find someone who can\'t wait to work on it with you.',

@@ -2,12 +2,9 @@ import { createClient, getUser } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Sniglet } from 'next/font/google'
 import ProjectCard from '@/app/components/ProjectCard'
 import { signInWithGoogle } from '@/app/actions'
 import FaqAccordion from '@/app/components/FaqAccordion'
-
-const sniglet = Sniglet({ weight: '400', subsets: ['latin'], display: 'swap' })
 
 function GoogleIcon() {
   return (
@@ -86,7 +83,8 @@ export default async function Home({
               </div>
 
               {/* Right: browser chrome card */}
-              <div className="relative">
+              <div>
+                <p className="text-xs text-blue-300 uppercase tracking-widest mb-3">Example project</p>
                 {/* Card */}
                 <div className="rounded-2xl border border-gray-200 shadow-sm overflow-hidden bg-white">
                   {/* Chrome bar */}
@@ -106,7 +104,7 @@ export default async function Home({
                     </div>
                   </div>
 
-                  {/* Content: project screenshot with example label */}
+                  {/* Content: project screenshot */}
                   <div className="relative h-52 md:h-64 overflow-hidden">
                     <Image
                       src="/ticket-alert-preview.png"
@@ -114,10 +112,6 @@ export default async function Home({
                       fill
                       className="object-cover object-top"
                     />
-                    {/* Diagonal "Example project" ribbon — top-right corner */}
-                    <div className="absolute -right-9 top-5 rotate-45 bg-black/70 text-white w-36 py-1.5 text-center">
-                      <span className={`${sniglet.className} text-[11px] tracking-wide`}>Example project</span>
-                    </div>
                   </div>
 
                   {/* Live status */}
