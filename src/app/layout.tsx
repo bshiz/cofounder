@@ -13,12 +13,12 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 
 
 export const metadata: Metadata = {
-  title: 'Kindred',
-  description: 'Where makers find each other. Share what you\'re building and find someone who can\'t wait to work on it with you.',
+  title: 'Kindred: A permanent link for what you build',
+  description: 'Upload something you made with AI and get a link that always shows the latest version.',
   metadataBase: new URL('https://findkindred.co'),
   openGraph: {
-    title: 'Kindred',
-    description: 'Where makers find each other. Share what you\'re building and find someone who can\'t wait to work on it with you.',
+    title: 'Kindred: A permanent link for what you build',
+    description: 'Upload something you made with AI and get a link that always shows the latest version.',
     url: 'https://findkindred.co',
     siteName: 'Kindred',
     images: [
@@ -26,15 +26,15 @@ export const metadata: Metadata = {
         url: '/kindred_og.png',
         width: 1200,
         height: 630,
-        alt: 'Kindred — Where makers find each other',
+        alt: 'Kindred: A permanent link for what you build',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Kindred',
-    description: 'Where makers find each other. Share what you\'re building and find someone who can\'t wait to work on it with you.',
+    title: 'Kindred: A permanent link for what you build',
+    description: 'Upload something you made with AI and get a link that always shows the latest version.',
     images: ['/kindred_og.png'],
   },
 }
