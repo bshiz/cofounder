@@ -84,7 +84,7 @@ export default async function Home({
 
               {/* Right: browser chrome card */}
               <div>
-                <p className="text-xs text-blue-300 uppercase tracking-widest mb-3">Example project</p>
+                <p className="text-xs text-blue-300 uppercase tracking-widest mb-3 text-center">Example project</p>
                 {/* Card */}
                 <div className="rounded-2xl border border-gray-200 shadow-sm overflow-hidden bg-white">
                   {/* Chrome bar */}
